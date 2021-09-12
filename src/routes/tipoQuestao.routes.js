@@ -12,4 +12,11 @@ module.exports = app => {
         tipoQuestao.read(res)
     )
 
+    app.patch('/tipoQuestao/:idTipoQuestao', (req, res) => {
+        const idTipoQuestao = parseInt(req.params.idTipoQuestao)
+        const campos = req.body
+
+        tipoQuestao.update(campos, idTipoQuestao, res)
+    })
+
 }
