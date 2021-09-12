@@ -19,4 +19,10 @@ module.exports = app => {
         tipoQuestao.update(campos, idTipoQuestao, res)
     })
 
+    app.delete('/tipoQuestao/:idTipoQuestao', (req, res) => {
+        const idTipoQuestao = parseInt(req.params.idTipoQuestao)
+        
+        tipoQuestao.delete(idTipoQuestao, res)
+    })
+
 }
