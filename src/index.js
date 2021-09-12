@@ -7,5 +7,8 @@ app.use(express.urlencoded({ extended: true }))
 //parse requests of content-type: application/json
 app.use(express.json())
 
+require('./routes/tipoQuestao.routes')(app)
+
 const porta = 3000;
 app.listen(porta, () => {console.log(`Aplicação rodando com SUCESSO na porta ${porta}! 🚀`)});
+
