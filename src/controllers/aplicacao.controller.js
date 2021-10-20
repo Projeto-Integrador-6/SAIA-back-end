@@ -1,12 +1,15 @@
 const db = require('../models/index.js')
-const TipoQuestao = db.tipoQuestao
+const Aplicacao = db.aplicacao
 
 exports.create = (req, res) => {
-    const tipoQuestao = {
-        descricao: req.body.descricao,
+    const aplicacao = {
+        valor: req.body.valor,
+        dataInicio: req.body.dataInicio,
+        dataFim: req.body.dataFim,
+        idAvaliacao: req.body.idAvaliacao
     }
 
-    TipoQuestao.create(tipoQuestao)
+    Aplicacao.create(aplicacao)
         .then(data => {
             res.send(data)
         })
@@ -19,7 +22,7 @@ exports.create = (req, res) => {
 }
 
 exports.findAll = (req, res) => {
-    TipoQuestao.findAll()
+    Aplicacao.findAll()
     .then(data => {
         res.send(data)
     })
@@ -32,13 +35,13 @@ exports.findAll = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-    const tipoQuestao = {
-        idTipoQuestao: req.body.idTipoQuestao
+    const aplicacao = {
+        idAplicacao: req.body.idAplicacao
     }
   
-    TipoQuestao.destroy({
+    Aplicacao.destroy({
         where: {
-            idTipoQuestao: req.body.idTipoQuestao
+            idAplicacao: req.body.idAplicacao
         }
     })
         .then(data => {

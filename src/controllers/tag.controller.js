@@ -1,12 +1,12 @@
 const db = require('../models/index.js')
-const TipoQuestao = db.tipoQuestao
+const Tag = db.tag
 
 exports.create = (req, res) => {
-    const tipoQuestao = {
-        descricao: req.body.descricao,
+    const tag = {
+        descricao: req.body.descricao
     }
 
-    TipoQuestao.create(tipoQuestao)
+    Tag.create(tag)
         .then(data => {
             res.send(data)
         })
@@ -19,7 +19,7 @@ exports.create = (req, res) => {
 }
 
 exports.findAll = (req, res) => {
-    TipoQuestao.findAll()
+    Tag.findAll()
     .then(data => {
         res.send(data)
     })
@@ -32,13 +32,13 @@ exports.findAll = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-    const tipoQuestao = {
-        idTipoQuestao: req.body.idTipoQuestao
+    const tag = {
+        idTag: req.body.idTag
     }
   
-    TipoQuestao.destroy({
+    Tag.destroy({
         where: {
-            idTipoQuestao: req.body.idTipoQuestao
+            idTag: req.body.idTag
         }
     })
         .then(data => {
