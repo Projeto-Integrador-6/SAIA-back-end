@@ -3,6 +3,7 @@ const Questao = db.questao
 
 exports.create = (req, res) => {
     const questao = {
+        nome: req.body.nome,
         enunciado: req.body.enunciado,
         valor: req.body.valor,
         idTipoQuestao: req.body.idTipoQuestao
@@ -18,6 +19,9 @@ exports.create = (req, res) => {
                     err.message || 'Some error occurred...'
             })
         })
+
+    
+    
 }
 
 exports.findAll = (req, res) => {

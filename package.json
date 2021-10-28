@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Projeto-Integrador-5/SAIA-back-end#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5"
