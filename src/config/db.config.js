@@ -1,7 +1,9 @@
+require('dotenv/config');
+
 module.exports = {
-    HOST: 'localhost',
-    USER: 'root',
-    PASSWORD: 'root',
-    DATABASE: 'projetointegradorvi',
-    DIALECT: 'mysql'
+    HOST: process.env.DB_HOST || 'localhost',
+    USER: process.env.DB_USERNAME || 'root',
+    PASSWORD: process.env.DB_PASSWORD || 'root',
+    DATABASE: process.env.DB_DATABASE || 'projetointegradorvi',
+    DIALECT: process.env.DB_DIALECT || 'mysql'
 }
