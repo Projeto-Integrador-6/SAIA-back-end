@@ -1,8 +1,10 @@
-aplicacao = require('../controllers/aplicacao.controller.js')
+const express = require('express');
+const route = express.Router();
 
-module.exports = app => {
-    
-    app.post('/aplicacao', aplicacao.create)
-    app.get('/aplicacao', aplicacao.findAll)
-    app.delete('/aplicacao', aplicacao.delete)
-}
+const Aplicacao = require('../controllers/aplicacao.controller.js')
+
+route.post('/aplicacao', Aplicacao.create);
+route.get('/aplicacao', Aplicacao.findAll);
+route.delete('/aplicacao', Aplicacao.delete);
+
+module.exports = route;

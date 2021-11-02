@@ -7,10 +7,11 @@ const routes = require('./routes/routes');
 app.use(express.urlencoded({ extended: true }))
 //parse requests of content-type: application/json
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 app.use(routes);
 
-const db = require('./models/index.js')
+const db = require('./models/index.js');
+
 // db.sequelize.sync({ force: true }).then(() => {
 //      console.log("Drop and re-sync db.");
 //  });

@@ -1,7 +1,9 @@
-questao_tag = require('../controllers/questao_tag.controller.js')
+const express = require('express');
+const route = express.Router();
 
-module.exports = app => {
-    
-    app.post('/questao_tag', questao_tag.create)
-    app.get('/questao_tag', questao_tag.findAll)
-}
+const QuestaoTag = require('../controllers/questao_tag.controller.js')
+
+route.post('/questao_tag', QuestaoTag.create);
+route.get('/questao_tag', QuestaoTag.findAll);
+
+module.exports = route;

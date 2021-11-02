@@ -1,8 +1,10 @@
-tag = require('../controllers/tag.controller.js')
+const express = require('express');
+const route = express.Router();
 
-module.exports = app => {
-    
-    app.post('/tag', tag.create)
-    app.get('/tag', tag.findAll)
-    app.delete('/tag', tag.delete)
-}
+const tag = require('../controllers/tag.controller.js')
+
+route.post('/tag', tag.create);
+route.get('/tag', tag.findAll);
+route.delete('/tag', tag.delete);
+
+module.exports = route;
