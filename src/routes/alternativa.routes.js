@@ -1,8 +1,10 @@
-alternativa = require('../controllers/alternativa.controller.js')
+const express = require('express');
+const route = express.Router();
 
-module.exports = app => {
-    
-    app.post('/alternativa', alternativa.create)
-    app.get('/alternativa', alternativa.findAll)
-    app.delete('/alternativa', alternativa.delete)
-}
+const Alternativa = require('../controllers/alternativa.controller.js')
+
+route.post('/alternativa', Alternativa.create);
+route.get('/alternativa', Alternativa.findAll);
+route.delete('/alternativa', Alternativa.delete);
+
+module.exports = route;
