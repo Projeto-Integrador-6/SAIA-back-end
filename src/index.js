@@ -14,7 +14,7 @@ const db = require('./models/index.js');
 
 // db.sequelize.sync({ force: true }).then(() => {
 //      console.log("Drop and re-sync db.");
-//  });
+// });
 
 const porta = 3002;
 app.listen(porta, () => {console.log(`Aplicação rodando com SUCESSO na porta ${porta}! 🚀`)});

@@ -24,18 +24,24 @@ module.exports = {
                 idTipoQuestao: idTipoQuestao
             })
 
-
-            for (let i = 0; i < alternativas.length; i++) {
-                await Alternativa.create({
-                    descricao: alternativas[i].descricao,
-                    isAlternativaCorreta: alternativas[i].isAlternativaCorreta,
-                    idQuestao: newQuestao.idQuestao
-                })
+            if (alternativas !== undefined) {
+                for (let i = 0; i < alternativas.length; i++) {
+                    await Alternativa.create({
+                        descricao: alternativas[i].descricao,
+                        isAlternativaCorreta: alternativas[i].isAlternativaCorreta,
+                        idQuestao: newQuestao.idQuestao
+                    })
+                }
             }
 
-
             await transaction.commit();
-            res.status(200).json({ sucess: "Questão e alternativas foram criadas com sucesso." });
+            
+            if(alternativas === undefined){
+                res.status(200).json({ sucess: "Questão foi criada com sucesso." });
+            }
+            else {
+                res.status(200).json({ sucess: "Questão e alternativas foram criadas com sucesso." });
+            }
         } catch (err) {
             transaction.rollback();
             res.status(400).json({ error: "Ocorreu um erro durante a criação da questão ou alternativa." });
