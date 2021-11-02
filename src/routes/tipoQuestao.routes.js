@@ -1,9 +1,10 @@
-const tipoQuestao = require ('../controllers/tipoQuestao.controller.js')
+const express = require('express');
+const route = express.Router();
 
-module.exports = app => {
+const TipoQuestao = require ('../controllers/tipoQuestao.controller.js')
 
-    app.post("/tipoQuestao", tipoQuestao.create)
-    app.get("/tipoQuestao", tipoQuestao.findAll)
-    app.delete('/tipoQuestao', tipoQuestao.delete)
+route.post("/tipoQuestao", TipoQuestao.create)
+route.get("/tipoQuestao", TipoQuestao.findAll)
+route.delete('/tipoQuestao', TipoQuestao.delete)
 
-  }
+module.exports = route;

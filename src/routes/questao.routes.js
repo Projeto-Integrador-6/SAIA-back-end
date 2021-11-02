@@ -1,9 +1,10 @@
-questao = require('../controllers/questao.controller.js')
+const express = require('express');
+const route = express.Router();
 
-module.exports = app => {
+const Questao = require('../controllers/questao.controller.js')
     
-    app.post('/questao', questao.create)
-    app.get('/questao', questao.findAll)
-    app.delete('/questao', questao.delete)
-    
-}
+route.post('/questao', Questao.create);
+route.get('/questao', Questao.findAll);
+route.delete('/questao', Questao.delete);
+
+module.exports = route;
