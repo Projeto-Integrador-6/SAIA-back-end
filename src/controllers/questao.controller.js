@@ -3,6 +3,7 @@ const Sequelize = require('../database/db');
 
 const Questao = db.questao;
 const Alternativa = db.alternativa;
+const Tag = db.questao_tag;
 
 module.exports = {
     async create(req, res) {
@@ -11,7 +12,8 @@ module.exports = {
             enunciado,
             valor,
             idTipoQuestao,
-            alternativas
+            alternativas,
+            tags
         } = req.body
 
         const transaction = await Sequelize.transaction();
@@ -32,6 +34,13 @@ module.exports = {
                         idQuestao: newQuestao.idQuestao
                     })
                 }
+            }
+
+            for(let j = 0; j < tags.length; j++) {
+                await Tag.create({
+                    questao_id: newQuestao.idQuestao,
+                    tag_id: tags[j].tag_id
+                })
             }
 
             await transaction.commit();
