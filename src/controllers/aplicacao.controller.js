@@ -4,9 +4,11 @@ const Aplicacao = db.aplicacao
 exports.create = (req, res) => {
     const aplicacao = {
         valor: req.body.valor,
+        nome: req.body.nome,
         dataInicio: req.body.dataInicio,
         dataFim: req.body.dataFim,
-        idAvaliacao: req.body.idAvaliacao
+        idAvaliacao: req.body.idAvaliacao,
+        
     }
 
     Aplicacao.create(aplicacao)
