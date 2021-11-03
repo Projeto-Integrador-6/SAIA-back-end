@@ -36,16 +36,18 @@ module.exports = {
                 }
             }
 
-            for(let j = 0; j < tags.length; j++) {
-                await Tag.create({
-                    questao_id: newQuestao.idQuestao,
-                    tag_id: tags[j].tag_id
-                })
+            if (tags !== undefined) {
+                for (let j = 0; j < tags.length; j++) {
+                    await Tag.create({
+                        questao_id: newQuestao.idQuestao,
+                        tag_id: tags[j].idTag
+                    })
+                }
             }
 
             await transaction.commit();
-            
-            if(alternativas === undefined){
+
+            if (alternativas === undefined) {
                 res.status(200).json({ sucess: "Questão foi criada com sucesso." });
             }
             else {
