@@ -38,8 +38,8 @@ db.tag.belongsToMany(db.questao, {
 db.questao.hasMany(db.alternativa, {foreignKey: 'idQuestao'})
 db.alternativa.belongsTo(db.questao, {foreignKey: 'idQuestao'})
 
-db.avaliacao.hasMany(db.alternativa, {foreignKey: 'idAvaliacao'})
-db.aplicacao.belongsTo(db.questao, {foreignKey: 'idAvaliacao'})
+db.avaliacao.hasMany(db.aplicacao, {foreignKey: 'idAvaliacao'})
+db.aplicacao.belongsTo(db.avaliacao, {foreignKey: 'idAvaliacao'})
 
 db.questao.belongsToMany(db.avaliacao, {
   through: "questao_avaliacao",
