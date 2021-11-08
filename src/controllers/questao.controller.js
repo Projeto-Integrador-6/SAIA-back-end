@@ -55,6 +55,7 @@ module.exports = {
             }
         } catch (err) {
             transaction.rollback();
+            console.log
             res.status(400).json({ error: "Ocorreu um erro durante a criação da questão ou alternativa." });
         }
     },
@@ -71,6 +72,26 @@ module.exports = {
                 })
             })
     },
+
+    async findOne(req, res) {
+        const id = req.params.id;
+      
+        Alternativa.findByPk(id)
+          .then(data => {
+            if (data) {
+              res.send(data);
+            } else {
+              res.status(404).send({
+                message: `${id}`
+              });
+            }
+          })
+          .catch(err => {
+            res.status(500).send({
+              message: "Error:" + id
+            });
+          });
+      },
 
     async delete(req, res) {
         await Questao.destroy({

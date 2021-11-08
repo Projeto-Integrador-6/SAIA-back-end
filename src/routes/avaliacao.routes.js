@@ -6,5 +6,7 @@ const Avaliacao = require('../controllers/avaliacao.controller.js')
 route.post('/avaliacao', Avaliacao.create);
 route.get('/avaliacao', Avaliacao.findAll);
 route.delete('/avaliacao', Avaliacao.delete);
+route.get('/avaliacao/:id', Avaliacao.findOne)
+
 
 module.exports = route;

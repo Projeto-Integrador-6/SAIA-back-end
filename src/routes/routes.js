@@ -17,7 +17,6 @@ routes.use(Avaliacao);
 routes.use(QuestaoAvaliacao);
 routes.use(Aplicacao);
 routes.use(Tag);
-routes.use(Tag);
 routes.use(QuestaoTag);
 
 module.exports = routes;

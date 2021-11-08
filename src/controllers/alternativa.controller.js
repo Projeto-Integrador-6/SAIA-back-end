@@ -33,6 +33,26 @@ exports.findAll = (req, res) => {
     })
 }
 
+exports.findOne = (req, res) => {
+    const id = req.params.id;
+  
+    Alternativa.findByPk(id)
+      .then(data => {
+        if (data) {
+          res.send(data);
+        } else {
+          res.status(404).send({
+            message: `${id}`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error:" + id
+        });
+      });
+  };
+
 exports.delete = (req, res) => {
     const alternativa = {
         idAlternativa: req.body.idAlternativa

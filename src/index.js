@@ -13,7 +13,7 @@ app.use(routes);
 const db = require('./models/index.js');
 
 // db.sequelize.sync({ force: true }).then(() => {
-//      console.log("Drop and re-sync db.");
+//   console.log("Drop and re-sync db.");
 // });
 
 const porta = 3002;
