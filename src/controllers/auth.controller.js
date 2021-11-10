@@ -18,7 +18,7 @@ module.exports = {
                     message: 'Usuário não encontrado'
                 })
             }else{
-                if(bcrypt.compareSync(password, usuario.password)) {
+                if(bcrypt.compareSync(password, usuario.senha)) {
                     //Devolver Token
                     let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
                         expiresIn: authConfig.expires
@@ -29,7 +29,7 @@ module.exports = {
                     });
                 }else{
                     res.status(401).json({
-                        message: 'password incorreta!'
+                        message: 'Senha incorreta!'
                     });
                 }
             }
@@ -48,14 +48,15 @@ module.exports = {
             }else{
                 //Criptografar com Bcrypt
                 let { nome, email, tipoUsuario } = req.body;
-                let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
-
+                let senha = bcrypt.hashSync(req.body.senha, Number.parseInt(authConfig.rounds));
+                console.log(nome, email, tipoUsuario, senha);
+                console.log(authConfig);
                 //Criar Usuário
                 Usuario.create({
                     nome: nome,
                     email: email,
-                    password: password,
-                    tipoUsuario: tipoUsuario
+                    tipoUsuario: tipoUsuario,
+                    senha: senha
                 }).then(usuario => {
                     let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
                         expiresIn: authConfig.expires
@@ -68,14 +69,22 @@ module.exports = {
                 
                 }).catch(err => {
                     res.status(500).json({
-                        message: 'Erro ao cadastrar usuário'
+                        message: 'Erro ao cadastrar usuário2',
+                        nome: nome,
+                        email: email,
+                        tipoUsuario: tipoUsuario,
+                        senha: senha
                     });
                 });
 
             }
         }).catch(err => {
             res.status(500).json({
-                message: 'Erro ao cadastrar usuário'
+                message: 'Erro ao cadastrar usuário',
+                nome: nome,
+                email: email,
+                tipoUsuario: tipoUsuario,
+                senha: senha
             });
         });
 

@@ -30,7 +30,20 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       },
-      password: {
+      tipoUsuario: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isAlphanumeric: {
+            msg: "Tipo de usuário inválido"
+          },
+          len: {
+            args: [1, 2],
+            msg: "Tipo de usuário inválido"
+          }
+        }
+      },
+      senha: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -40,19 +53,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       },
-      tipoUsuario: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          isAlphanumeric: {
-            msg: "Tipo de usuário inválido"
-          },
-          len: {
-            args: [1],
-            msg: "Tipo de usuário inválido"
-          }
-        }
-      }
   },
   {
       freezeTableName: true,
