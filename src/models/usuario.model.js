@@ -9,15 +9,36 @@ module.exports = (sequelize, DataTypes) => {
       },
       nome: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
+          validate: {
+            isAlpha: {
+              msg: "O nome so pode conter letras"
+            },
+            len: {
+              args: [2, 255],
+              msg: "O nome deve ter um mínimo de 2 caracteres!"
+            }
+          }
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: {
+            msg: "O e-mail deve ser um correio eletrônico válido!"
+          }
+        }
       },
       senha: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          len: {
+            args: [6, 255],
+            msg: "A senha deve ter um mínimo de 6 caracteres!"
+          }
+        }
       }
   }, 
   {
