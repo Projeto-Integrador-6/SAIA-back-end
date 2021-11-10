@@ -68,7 +68,7 @@ db.disciplina.belongsToMany(db.usuario, {
   as: "disciplina_aluno",
   foreignKey: "disciplina_id",
 });
-//AlunoDisciplina
+//ProfessorDisciplina
 db.usuario.belongsToMany(db.disciplina, {
   through: "professor_disciplina",
   as: "usuario_professor",
