@@ -1,6 +1,8 @@
 const express = require('express');
 const routes = express.Router();
 
+const Auth = require('./auth.routes');
+const Usuario = require('./usuario.routes');
 const TipoQuestaoRoutes = require('./tipoQuestao.routes');
 const QuestaoRoutes = require('./questao.routes');
 const AlternativaRoutes = require('./alternativa.routes');
@@ -8,8 +10,10 @@ const Avaliacao = require('./avaliacao.routes');
 const QuestaoAvaliacao = require('./questao_avaliacao.routes');
 const Aplicacao = require('./aplicacao.routes');
 const Tag = require('./tag.routes');
-const QuestaoTag = require('./questao_tag');
+const QuestaoTag = require('./questao_tag.routes');
 
+routes.use(Auth);
+routes.use(Usuario);
 routes.use(TipoQuestaoRoutes);
 routes.use(QuestaoRoutes);
 routes.use(AlternativaRoutes);

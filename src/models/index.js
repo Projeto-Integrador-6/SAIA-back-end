@@ -11,6 +11,7 @@ const db = {};
 db.DataTypes = DataTypes;
 db.sequelize = sequelize;
 
+db.usuario = require('./usuario.model.js')(sequelize, DataTypes)
 db.tipoQuestao = require("./tipoQuestao.model.js")(sequelize, DataTypes);
 db.tag = require("./tag.model.js")(sequelize, DataTypes)
 db.questao = require("./questao.model.js")(sequelize, DataTypes)
