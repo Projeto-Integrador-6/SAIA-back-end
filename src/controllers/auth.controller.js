@@ -49,8 +49,6 @@ module.exports = {
                 //Criptografar com Bcrypt
                 let { nome, email, tipoUsuario } = req.body;
                 let senha = bcrypt.hashSync(req.body.senha, Number.parseInt(authConfig.rounds));
-                console.log(nome, email, tipoUsuario, senha);
-                console.log(authConfig);
                 //Criar Usuário
                 Usuario.create({
                     nome: nome,
@@ -69,22 +67,14 @@ module.exports = {
                 
                 }).catch(err => {
                     res.status(500).json({
-                        message: 'Erro ao cadastrar usuário2',
-                        nome: nome,
-                        email: email,
-                        tipoUsuario: tipoUsuario,
-                        senha: senha
+                        message: 'Erro ao cadastrar usuário2'
                     });
                 });
 
             }
         }).catch(err => {
             res.status(500).json({
-                message: 'Erro ao cadastrar usuário',
-                nome: nome,
-                email: email,
-                tipoUsuario: tipoUsuario,
-                senha: senha
+                message: 'Erro ao cadastrar usuário'
             });
         });
 
