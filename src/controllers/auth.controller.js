@@ -50,13 +50,13 @@ module.exports = {
                 })
             }else{
                 //Criptografar com Bcrypt
-                let { nome, email } = req.body;
+                let { nome, email, tipoUsuario } = req.body;
                 let senha = bcrypt.hashSync(req.body.senha, Number.parseInt(authConfig.rounds));
-
                 //Criar Usuário
                 Usuario.create({
                     nome: nome,
                     email: email,
+                    tipoUsuario: tipoUsuario,
                     senha: senha
                 }).then(usuario => {
                     let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
