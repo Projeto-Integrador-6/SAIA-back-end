@@ -30,13 +30,13 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       },
-      senha: {
+      password: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           len: {
             args: [6, 255],
-            msg: "A senha deve ter um mínimo de 6 caracteres!"
+            msg: "O password deve ter um mínimo de 6 caracteres!"
           }
         }
       }

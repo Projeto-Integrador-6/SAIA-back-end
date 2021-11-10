@@ -18,7 +18,7 @@ module.exports = {
                     message: 'Usuário não encontrado'
                 })
             }else{
-                if(bcrypt.compareSync(password, usuario.senha)) {
+                if(bcrypt.compareSync(password, usuario.password)) {
                     //Devolver Token
                     let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
                         expiresIn: authConfig.expires
@@ -29,7 +29,7 @@ module.exports = {
                     });
                 }else{
                     res.status(401).json({
-                        message: 'Senha incorreta!'
+                        message: 'password incorreta!'
                     });
                 }
             }
@@ -48,13 +48,13 @@ module.exports = {
             }else{
                 //Criptografar com Bcrypt
                 let { nome, email } = req.body;
-                let senha = bcrypt.hashSync(req.body.senha, Number.parseInt(authConfig.rounds));
+                let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
 
                 //Criar Usuário
                 Usuario.create({
                     nome: nome,
                     email: email,
-                    senha: senha
+                    password: password
                 }).then(usuario => {
                     let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
                         expiresIn: authConfig.expires
