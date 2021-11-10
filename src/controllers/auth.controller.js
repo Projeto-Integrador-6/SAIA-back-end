@@ -9,7 +9,7 @@ module.exports = {
     //Login
     async login(req, res){
 
-        let { email, senha } = req.body;
+        let { email, password } = req.body;
 
         //Verifica dados do usuário para login
         Usuario.findOne({where:{ email: email}}).then(usuario => {
@@ -18,7 +18,7 @@ module.exports = {
                     message: 'Usuário não encontrado'
                 })
             }else{
-                if(bcrypt.compareSync(senha, usuario.senha)) {
+                if(bcrypt.compareSync(password, usuario.senha)) {
                     //Devolver Token
                     let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
                         expiresIn: authConfig.expires

@@ -4,7 +4,7 @@ const { Sequelize } = require('sequelize');
 //cria uma conexão com o banco de dados
 const sequelize = new Sequelize(Dbconfig.DATABASE, Dbconfig.USER, Dbconfig.PASSWORD, {
     host: Dbconfig.HOST,
-    dialect: Dbconfig.DIA
+    dialect: Dbconfig.DIALECT
 })
 
 //abre uma conexão com o banco de dados
