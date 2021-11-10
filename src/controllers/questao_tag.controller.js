@@ -1,4 +1,5 @@
 const db = require('../models/index.js')
+const Tag = db.Tag
 const Questao_Tag = db.questao_tag
 
 exports.create = (req, res) => {
@@ -20,14 +21,15 @@ exports.create = (req, res) => {
 }
 
 exports.findAll = (req, res) => {
+
     Questao_Tag.findAll()
-    .then(data => {
-        res.send(data)
-    })
-    .catch(err => {
-        res.status(500).send({
-            message:
-                err.message || 'Some error occurred.'
+        .then(data => {
+            res.send(data)
         })
-    })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || 'Some error occurred.'
+            })
+        })
 }

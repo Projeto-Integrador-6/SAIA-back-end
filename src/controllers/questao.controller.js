@@ -55,7 +55,6 @@ module.exports = {
             }
         } catch (err) {
             transaction.rollback();
-            console.log
             res.status(400).json({ error: "Ocorreu um erro durante a criação da questão ou alternativa." });
         }
     },
@@ -75,23 +74,27 @@ module.exports = {
 
     async findOne(req, res) {
         const id = req.params.id;
-      
-        Alternativa.findByPk(id)
-          .then(data => {
-            if (data) {
-              res.send(data);
+
+
+        try {
+            const questao = await Questao.findOne({ where: { idQuestao: id }})
+
+            if (questao == null) {
+                return res.status(400).send({ err: "Questão não encontrada." });
             } else {
-              res.status(404).send({
-                message: `${id}`
-              });
+                const alternativas = await Alternativa.findAll({ where: { idQuestao: id } })
+                
+                const tags = await Tag.findAll({ where: { questao_id: id } })
+                
+                
+                res.status(200).json({ questao, alternativas, tags });
+                
             }
-          })
-          .catch(err => {
-            res.status(500).send({
-              message: "Error:" + id
-            });
-          });
-      },
+        } catch(err) {
+            res.status(400).json({ error: "Ocorreu um erro ao buscar a questão."});
+        }
+
+    },
 
     async delete(req, res) {
         await Questao.destroy({

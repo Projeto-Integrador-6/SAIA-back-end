@@ -3,6 +3,7 @@ const Usuario = db.usuario
 
 exports.findAll = (req, res) => {
     Usuario.findAll()
+
     .then(data => {
         res.send(data)
     })
