@@ -39,8 +39,21 @@ module.exports = (sequelize, DataTypes) => {
             msg: "O password deve ter um mínimo de 6 caracteres!"
           }
         }
+      },
+      tipoUsuario: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isAlphanumeric: {
+            msg: "Tipo de usuário inválido"
+          },
+          len: {
+            args: [1],
+            msg: "Tipo de usuário inválido"
+          }
+        }
       }
-  }, 
+  },
   {
       freezeTableName: true,
       timestamps: false,

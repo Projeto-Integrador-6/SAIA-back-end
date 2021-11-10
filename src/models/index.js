@@ -12,6 +12,9 @@ db.DataTypes = DataTypes;
 db.sequelize = sequelize;
 
 db.usuario = require('./usuario.model.js')(sequelize, DataTypes)
+db.disciplina = require('./disciplina.model.js')(sequelize, DataTypes)
+db.aluno_disciplina = require('./aluno_disciplina.model.js')(sequelize, DataTypes)
+db.professor_disciplina = require('./professor_disciplina.model.js')(sequelize, DataTypes)
 db.tipoQuestao = require("./tipoQuestao.model.js")(sequelize, DataTypes);
 db.tag = require("./tag.model.js")(sequelize, DataTypes)
 db.questao = require("./questao.model.js")(sequelize, DataTypes)
@@ -53,6 +56,30 @@ db.avaliacao.belongsToMany(db.questao, {
   as: "avaliacao_av",
   foreignKey: "avaliacao_id",
 });
+
+//AlunoDisciplina
+db.usuario.belongsToMany(db.disciplina, {
+  through: "aluno_disciplina",
+  as: "usuario_aluno",
+  foreignKey: "usuario_id",
+});
+db.disciplina.belongsToMany(db.usuario, {
+  through: "aluno_disciplina",
+  as: "disciplina_aluno",
+  foreignKey: "disciplina_id",
+});
+//AlunoDisciplina
+db.usuario.belongsToMany(db.disciplina, {
+  through: "professor_disciplina",
+  as: "usuario_professor",
+  foreignKey: "usuario_id",
+});
+db.disciplina.belongsToMany(db.usuario, {
+  through: "professor_disciplina",
+  as: "disciplina_professor",
+  foreignKey: "disciplina_id",
+});
+
 
 
 module.exports = db;
