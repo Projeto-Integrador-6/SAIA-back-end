@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       },
-      senha: {
+      password: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
