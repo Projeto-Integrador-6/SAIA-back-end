@@ -29,13 +29,11 @@ db.questao.belongsTo(db.tipoQuestao, {foreignKey: 'idTipoQuestao'})
 
 db.questao.belongsToMany(db.tag, {
   through: "questao_tag",
-  as: "questao",
   foreignKey: "questao_id",
 });
 
 db.tag.belongsToMany(db.questao, {
   through: "questao_tag",
-  as: "tag",
   foreignKey: "tag_id",
 });
 
@@ -63,23 +61,25 @@ db.usuario.belongsToMany(db.disciplina, {
   as: "usuario_aluno",
   foreignKey: "usuario_id",
 });
+
 db.disciplina.belongsToMany(db.usuario, {
   through: "aluno_disciplina",
   as: "disciplina_aluno",
   foreignKey: "disciplina_id",
 });
+
 //ProfessorDisciplina
 db.usuario.belongsToMany(db.disciplina, {
   through: "professor_disciplina",
   as: "usuario_professor",
   foreignKey: "usuario_id",
 });
+
 db.disciplina.belongsToMany(db.usuario, {
   through: "professor_disciplina",
   as: "disciplina_professor",
   foreignKey: "disciplina_id",
 });
-
 
 
 module.exports = db;
