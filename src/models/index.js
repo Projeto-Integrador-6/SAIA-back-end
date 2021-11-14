@@ -89,4 +89,7 @@ db.avaliacao.belongsTo(db.disciplina, {foreignKey: 'idDisciplina'});
 
 db.usuario.hasMany(db.avaliacao, {foreignKey: 'idUsuario'});
 db.avaliacao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
+
+db.usuario.hasMany(db.questao, {foreignKey: 'idUsuario'});
+db.questao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
 module.exports = db;
