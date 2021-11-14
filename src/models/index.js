@@ -24,8 +24,11 @@ db.questao_tag = require('./questao_tag.model.js')(sequelize, DataTypes)
 db.questao_avaliacao = require('./questao_avaliacao.model.js')(sequelize, DataTypes)
 db.aplicacao = require('./aplicacao.model.js')(sequelize, DataTypes)
 
+
 db.tipoQuestao.hasMany(db.questao, {foreignKey: 'idTipoQuestao'})
 db.questao.belongsTo(db.tipoQuestao, {foreignKey: 'idTipoQuestao'})
+
+
 
 db.questao.belongsToMany(db.tag, {
   through: "questao_tag",
@@ -81,5 +84,9 @@ db.disciplina.belongsToMany(db.usuario, {
   foreignKey: "disciplina_id",
 });
 
+db.disciplina.hasMany(db.avaliacao, {foreignKey: 'idDisciplina'});
+db.avaliacao.belongsTo(db.disciplina, {foreignKey: 'idDisciplina'});
 
+db.usuario.hasMany(db.avaliacao, {foreignKey: 'idUsuario'});
+db.avaliacao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
 module.exports = db;
