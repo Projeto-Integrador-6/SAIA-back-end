@@ -4,7 +4,7 @@ const route = express.Router();
 const Aplicacao = require('../controllers/aplicacao.controller.js')
 
 route.post('/aplicacao', Aplicacao.create);
-route.get('/aplicacao', Aplicacao.findAll);
+route.get('/aplicacao/user/:usuario', Aplicacao.findAll);
 route.delete('/aplicacao', Aplicacao.delete);
 route.get('/aplicacao/:id', Aplicacao.findOne)
 

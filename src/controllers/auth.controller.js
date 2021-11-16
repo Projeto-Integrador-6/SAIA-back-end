@@ -38,50 +38,5 @@ module.exports = {
             }
         })
 
-    },
-
-    //Cadastro
-    async cadastro(req, res){
-
-        Usuario.findOne({where:{email:req.body.email}}).then(result => {
-            if(result){
-                res.status(409).json({
-                    error: 'Email já existe.'
-                })
-            }else{
-                //Criptografar com Bcrypt
-                let { nome, email, tipoUsuario } = req.body;
-                let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
-                //Criar Usuário
-                Usuario.create({
-                    nome: nome,
-                    email: email,
-                    tipoUsuario: tipoUsuario,
-                    password: password
-                }).then(usuario => {
-                    let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
-                        expiresIn: authConfig.expires
-                    });
-                    
-                    usuario.password = undefined;
-                    
-                    res.json({
-                        usuario: usuario
-                    });
-                
-                }).catch(err => {
-                    res.status(500).json({
-                        error: 'Erro ao cadastrar usuário'
-                    });
-                });
-
-            }
-        }).catch(err => {
-            res.status(500).json({
-                error: 'Erro ao cadastrar usuário'
-            });
-        });
-
-        
     }
 }
