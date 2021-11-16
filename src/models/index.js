@@ -28,8 +28,6 @@ db.aplicacao = require('./aplicacao.model.js')(sequelize, DataTypes)
 db.tipoQuestao.hasMany(db.questao, {foreignKey: 'idTipoQuestao'})
 db.questao.belongsTo(db.tipoQuestao, {foreignKey: 'idTipoQuestao'})
 
-
-
 db.questao.belongsToMany(db.tag, {
   through: "questao_tag",
   foreignKey: "questao_id",
@@ -48,13 +46,11 @@ db.aplicacao.belongsTo(db.avaliacao, {foreignKey: 'idAvaliacao'})
 
 db.questao.belongsToMany(db.avaliacao, {
   through: "questao_avaliacao",
-  as: "questao_av",
   foreignKey: "questao_id",
 });
 
 db.avaliacao.belongsToMany(db.questao, {
   through: "questao_avaliacao",
-  as: "avaliacao_av",
   foreignKey: "avaliacao_id",
 });
 
@@ -84,8 +80,11 @@ db.disciplina.belongsToMany(db.usuario, {
   foreignKey: "disciplina_id",
 });
 
-db.disciplina.hasMany(db.avaliacao, {foreignKey: 'idDisciplina'});
-db.avaliacao.belongsTo(db.disciplina, {foreignKey: 'idDisciplina'});
+db.disciplina.hasMany(db.aplicacao, { foreignKey: 'idDisciplina' });
+db.aplicacao.belongsTo(db.disciplina, { foreignKey: 'idDisciplina' });
+
+db.usuario.hasMany(db.aplicacao, {foreignKey: 'idUsuario'});
+db.aplicacao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
 
 db.usuario.hasMany(db.avaliacao, {foreignKey: 'idUsuario'});
 db.avaliacao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});

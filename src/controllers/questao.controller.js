@@ -9,6 +9,7 @@ const TagQuestao = db.questao_tag;
 module.exports = {
     async create(req, res) {
         const {
+            idUsuario,
             nome,
             enunciado,
             valor,
@@ -20,7 +21,13 @@ module.exports = {
         const transaction = await Sequelize.transaction();
 
         try {
+
+            if(idUsuario == null){
+                res.status(400).json({ error: "Insira o id do usuário para criar uma questão." });
+            }
+
             const newQuestao = await Questao.create({
+                idUsuario: idUsuario,
                 nome: nome,
                 enunciado: enunciado,
                 valor: valor,
@@ -61,8 +68,10 @@ module.exports = {
     },
 
     async findAll(req, res) {
+        const usuario = req.params.usuario;
+
         try {
-            const questao = await Questao.findAll();
+            const questao = await Questao.findAll({ where: { idUsuario: usuario }});
             res.status(200).json({ result: questao });
         } catch (err) {
             res.status(400).json({ error: "Ocorreu um erro durante a busca." });
@@ -80,6 +89,7 @@ module.exports = {
             }
 
             const alternativas = await Alternativa.findAll({ where: { idQuestao: id } })
+            
             res.status(200).json({ questao, alternativas });
 
         } catch (err) {
@@ -110,6 +120,7 @@ module.exports = {
             }
 
             await Questao.update({
+                idUsuario: questao.idUsuario,
                 nome: nome,
                 enunciado: enunciado,
                 valor: valor,

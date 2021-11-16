@@ -62,10 +62,11 @@ module.exports = {
                     let token = jwt.sign({ usuario: usuario}, authConfig.secret, {
                         expiresIn: authConfig.expires
                     });
-                
+                    
+                    usuario.password = undefined;
+                    
                     res.json({
-                        usuario: usuario,
-                        token: token
+                        usuario: usuario
                     });
                 
                 }).catch(err => {
