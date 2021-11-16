@@ -1,4 +1,6 @@
 const db = require('../models/index.js');
+const Sequelize = require('../database/db');
+
 const bcrypt = require('bcrypt');
 const authConfig = require('../config/auth');
 
@@ -66,7 +68,7 @@ module.exports = {
       const usuario = await Usuario.findOne({ where: { idUsuario: id } })
 
       if (usuario == null) {
-        return res.status(400).send({ err: "Usuário não encontrada." });
+        return res.status(400).send({ err: "Usuário não encontrado." });
       }
 
       usuario.password = undefined;
@@ -77,6 +79,41 @@ module.exports = {
       console.log(err)
       res.status(400).json({ error: "Ocorreu um erro ao buscar o usuário." });
     }
-  }
+  },
+
+  async update(req, res){
+    const id = req.params.id;
+
+    const {
+        nome,
+        email,
+        tipoUsuario,
+        password
+    } = req.body
+
+    const transaction = await Sequelize.transaction();
+
+    try {
+        const usuario = await Usuario.findOne({ where: { idUsuario: id }})
+
+        if (usuario == null) {
+            return res.status(400).send({ err: "Usuário não encontrado." });
+        }            
+
+        await Usuario.update({
+            nome: nome,
+            email: email,
+            tipoUsuario: tipoUsuario,
+            password: password
+        }, { where: { idUsuario: id } });
+
+        await transaction.commit();
+        res.status(200).json({ success: "Usuário foi atualizado com sucesso." });
+        
+    } catch (err) {
+        transaction.rollback();
+        res.status(400).json({ error: "Ocorreu um erro ao editar o usuário." });
+    }
+},
 
 }
