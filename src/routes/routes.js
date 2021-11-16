@@ -14,6 +14,7 @@ const QuestaoAvaliacao = require('./questao_avaliacao.routes');
 const Aplicacao = require('./aplicacao.routes');
 const Tag = require('./tag.routes');
 const QuestaoTag = require('./questao_tag.routes');
+const RespostaAberta = require('./resposta_aberta.routes')
 
 routes.use(Auth);
 routes.use(Usuario);
@@ -28,5 +29,6 @@ routes.use(QuestaoAvaliacao);
 routes.use(Aplicacao);
 routes.use(Tag);
 routes.use(QuestaoTag);
+routes.use(RespostaAberta)
 
 module.exports = routes;

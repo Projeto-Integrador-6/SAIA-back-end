@@ -23,6 +23,7 @@ db.avaliacao = require('./avalicao.model.js')(sequelize, DataTypes)
 db.questao_tag = require('./questao_tag.model.js')(sequelize, DataTypes)
 db.questao_avaliacao = require('./questao_avaliacao.model.js')(sequelize, DataTypes)
 db.aplicacao = require('./aplicacao.model.js')(sequelize, DataTypes)
+db.resposta_aberta = require('./resposta_aberta.model.js')(sequelize, DataTypes)
 
 
 db.tipoQuestao.hasMany(db.questao, {foreignKey: 'idTipoQuestao'})
@@ -91,4 +92,14 @@ db.avaliacao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
 
 db.usuario.hasMany(db.questao, {foreignKey: 'idUsuario'});
 db.questao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
+
+//RespostaAberta
+db.usuario.hasMany(db.resposta_aberta, {foreignKey: 'idUsuario'});
+db.resposta_aberta.belongsTo(db.usuario, {foreignKey: 'idUsuario'})
+db.aplicacao.hasMany(db.resposta_aberta, {foreignKey: 'idAplicacao'});
+db.resposta_aberta.belongsTo(db.aplicacao, {foreignKey: 'idAplicacao'})
+db.questao.hasMany(db.resposta_aberta, {foreignKey: 'idQuestao'});
+db.resposta_aberta.belongsTo(db.questao, {foreignKey: 'idQuestao'})
+
+
 module.exports = db;
