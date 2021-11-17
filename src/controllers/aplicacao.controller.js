@@ -3,6 +3,9 @@ const Sequelize = require('../database/db');
 
 const Aplicacao = db.aplicacao;
 const Avaliacao = db.avaliacao;
+const Questao = db.questao;
+
+const AlunoDisciplina = db.aluno_disciplina;
 
 module.exports = {
     async create(req, res) {
@@ -11,7 +14,8 @@ module.exports = {
             dataInicio,
             dataFim,
             idAvaliacao,
-            idUsuario
+            idUsuario,
+            idDisciplina
         } = req.body
 
         const transaction = await Sequelize.transaction();
@@ -26,7 +30,8 @@ module.exports = {
                 dataInicio: dataInicio,
                 dataFim: dataFim,
                 idAvaliacao: idAvaliacao,
-                nome: `Aplicação da Avaliação: ${avaliacao.nome} - ${dataFim}`
+                idDisciplina: idDisciplina,
+                nome: `${avaliacao.nome} - ${dataInicio}`
             })
             nome = `Aplicação ${newAplicacao.dataInicio}`
 
@@ -63,10 +68,45 @@ module.exports = {
             res.status(200).json({ aplicacao });
 
         } catch (err) {
-            console.log(err)
             res.status(400).json({ error: "Ocorreu um erro ao buscar a aplicação." });
         }
 
+    },
+
+    async findByUser(req, res){
+        const idUsuario = req.params.usuario;
+
+        try {
+            const aluno_disciplina = await AlunoDisciplina.findAll({ where: { usuario_id: idUsuario } });
+            
+            const idDisciplinas = []
+
+            for(let i = 0; i < aluno_disciplina.length; i++){
+                idDisciplinas.push(aluno_disciplina[i].disciplina_id);
+            }
+
+            const aplicacao = await Aplicacao.findAll({ where: { idDisciplina: idDisciplinas }})
+
+            res.status(200).json({ result: aplicacao });
+
+        } catch (err) {
+            res.status(400).json({ error: "Ocorreu um erro ao buscar as avaliações aplicadas." });
+        }
+    },
+
+    async findAvaliacaoByAplicacao(req, res){
+        const idAplicacao = req.params.aplicacao;
+
+        try {
+            const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: idAplicacao }});
+
+            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: aplicacao.idAvaliacao }, include: Questao });
+
+            res.status(200).json({ result: avaliacao });
+
+        } catch (err) {
+            res.status(400).json({ error: "Ocorreu um erro ao buscar a avaliação." });
+        }
     },
 
     async update(req, res){
