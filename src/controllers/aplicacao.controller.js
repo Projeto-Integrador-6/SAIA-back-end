@@ -116,23 +116,28 @@ module.exports = {
             valor,
             dataInicio,
             dataFim,
+            idAvaliacao
         } = req.body
 
         const transaction = await Sequelize.transaction();
 
         try {
-            const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: id }})
+
+            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao }})
+
+            const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: id } });
 
             if (aplicacao == null) {
-                return res.status(400).send({ err: "Avaliação não encontrada." });
-            }            
+                return res.status(400).send({ err: "Aplicação não encontrada." });
+            }
 
             await Aplicacao.update({
-                idUsuario: aplicacao.idUsuario,
                 valor: valor,
                 dataInicio: dataInicio,
                 dataFim: dataFim,
-                nome: aplicacao.nome
+                idAvaliacao: aplicacao.idAvaliacao,
+                idUsuario: aplicacao.idUsuario,
+                nome: `Aplicação da Avaliação: ${avaliacao.nome} - ${dataFim}`
             }, { where: { idAplicacao: id } });
 
             await transaction.commit();

@@ -45,15 +45,33 @@ module.exports = {
                     });
                 }
             })
+    },
+
+
+    async update(req, res) {
+        const id = req.params.id;
+        const nome = req.body.nome;
+
+        Disciplina.update(
+            { nome: nome },
+            {
+                where: { idDisciplina: id }
+            })
+            .then(data => {
+                res.status(200).json({
+                    success: "Avaliação foi atualizada com sucesso."
+                })
+            })
             .catch(err => {
                 res.status(500).send({
-                    message: "Error:" + id
-                });
-            });
+                    error: "Ocorreu um erro ao editar a disciplina."
+                })
+            })
+
     },
 
     async delete(req, res) {
-        await Disciplina.destroy({
+        Disciplina.destroy({
             where: {
                 idDisciplina: req.body.idDisciplina
             }
@@ -66,6 +84,12 @@ module.exports = {
                     message:
                         err.message || 'Some error occurred...'
                 })
+                    .catch(err => {
+                        res.status(500).send({
+                            message: "Error:" + id
+                        });
+                    });
             })
     }
+
 }
