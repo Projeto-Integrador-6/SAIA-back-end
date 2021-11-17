@@ -76,11 +76,15 @@ module.exports = {
             valor,
             dataInicio,
             dataFim,
+            idAvaliacao
         } = req.body
 
         const transaction = await Sequelize.transaction();
 
         try {
+
+            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao }})
+
             const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: id } });
 
             if (aplicacao == null) {
@@ -93,7 +97,7 @@ module.exports = {
                 dataFim: dataFim,
                 idAvaliacao: aplicacao.idAvaliacao,
                 idUsuario: aplicacao.idUsuario,
-                nome: aplicacao.nome
+                nome: `Aplicação da Avaliação: ${avaliacao.nome} - ${dataFim}`
             }, { where: { idAplicacao: id } });
 
             await transaction.commit();
