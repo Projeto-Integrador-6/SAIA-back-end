@@ -52,6 +52,27 @@ exports.findOne = (req, res) => {
       });
   };
 
+    exports.update = async (req, res) => {
+        const id = req.params.id;
+        const nome = req.body.nome;
+        
+        Disciplina.update(
+                { nome: nome },
+                { where: { idDisciplina: id } 
+            })
+            .then(data => {
+                res.status(200).json({
+                    success: "Avaliação foi atualizada com sucesso."
+                })
+            })
+            .catch(err => {
+                res.status(500).send({
+                    error: "Ocorreu um erro ao editar a disciplina."
+                })
+            })
+    
+    }
+
 exports.delete = (req, res) => {  
     Disciplina.destroy({
         where: {
