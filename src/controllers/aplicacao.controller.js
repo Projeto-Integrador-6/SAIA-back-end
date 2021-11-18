@@ -31,11 +31,7 @@ module.exports = {
                 dataFim: dataFim,
                 idAvaliacao: idAvaliacao,
                 idDisciplina: idDisciplina,
-<<<<<<< HEAD
-                nome: `Aplicação da Avaliação: ${avaliacao.nome} - ${dataFim}`
-=======
                 nome: `${avaliacao.nome} - ${dataInicio}`
->>>>>>> 1b9d48573243c5c7a4fd635fbfd2e5a45516adaa
             })
             nome = `Aplicação ${newAplicacao.dataInicio}`
 
