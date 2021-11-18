@@ -4,32 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         resposta: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        idUsuario: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            onDelete: 'CASCADE',
-            references: {
-                model: 'usuario',
-                key: 'idUsuario'
-            }
-        },
-        idAplicacao: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'aplicacao',
-                key: 'idAplicacao'
-            }
-        },
-        idQuestao: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'questao',
-                key: 'idQuestao'
-            }
-        },
+        }
     }, 
     {
         freezeTableName: true,

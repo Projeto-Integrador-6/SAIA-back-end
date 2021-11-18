@@ -1,77 +1,92 @@
 const { usuario, aplicacao, questao } = require('../models/index.js')
-const db = require('../models/index.js')
+const db = require('../models/index.js');
+const Sequelize = require('../database/db');
+
 const Usuario = db.usuario
 const Aplicacao = db.aplicacao
 const Questao = db.questao
 const Resposta_Aberta = db.resposta_aberta
 
-exports.create = async (req, res) => {
-    const resposta_aberta = {
-        idUsuario: req.body.idUsuario,
-        idAplicacao: req.body.idAplicacao,
-        idQuestao: req.body.idQuestao,
-        resposta: req.body.resposta
-    }
-    
-    const usuario = await Usuario.findOne({ where: { idUsuario: resposta_aberta.idUsuario } });
-    if(!usuario){
-        return res.status(404).send({
-            message: "Usuário não encontrado!"
-        })
-    }
-    const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: resposta_aberta.idAplicacao } });
-    if(!aplicacao){
-        return res.status(404).send({
-            message: "Aplicação não encontrada!"
-        })
-    }
-    const questao = await Questao.findOne({ where: { idQuestao: resposta_aberta.idQuestao } });
-    if(!questao){
-        return res.status(404).send({
-            message: "Questão não encontrada!"
-        })
-    }
+module.exports = {
+    async create(req, res) {
+        const {
+            idAplicacao,
+            idUsuario,
+            resposta
+        } = req.body;
 
-    
+        const transaction = await Sequelize.transaction();
 
-    
+        try{
+            const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: idAplicacao } });
 
-    Resposta_Aberta.create(resposta_aberta)
-        .then(data => {
-            res.send(data)
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || 'Some error occurred...'
-            })
-        })
-}
-
-exports.findAll = (req, res) => {
-    Resposta_Aberta.findAll({
-        include: [
-            {
-                model: usuario,
-                as: 'usuario'
-            },
-            {
-                model: aplicacao,
-                as: 'aplicacao'
-            },
-            {
-                model: questao,
-                as: 'questao'
+            if (!aplicacao) {
+                return res.status(404).send({
+                    message: "Aplicação não encontrada!"
+                })
             }
-        ]
-    })
-    .then(data => {
-        res.send(data)
-    })
-    .catch(err => {
-        res.status(500).send({
-            message:
-                err.message || 'Some error occurred.'
+            
+            const usuario = await Usuario.findOne({ where: { idUsuario: idUsuario } });
+            
+            if (!usuario) {
+                return res.status(404).send({
+                    message: "Usuário não encontrado!"
+                })
+            }
+
+
+            
+            for (let i = 0; i < resposta.length; i++) {
+
+                const questao = await Questao.findOne({ where: { idQuestao: resposta[i].idQuestao } });
+                if (!questao) {
+                    return res.status(404).send({
+                        message: "Questão não encontrada!"
+                    })
+                }
+
+                await Resposta_Aberta.create({
+                    idAplicacao: idAplicacao,
+                    idUsuario: idUsuario,
+                    idQuestao: resposta[i].idQuestao,
+                    resposta: resposta[i].resposta
+                })
+             }
+
+             await transaction.commit();
+
+        } catch (err) {
+            transaction.rollback();
+            res.status(400).json({ error: "Ocorreu um erro durante o salvamento das respostas." });
+        }
+    
+    },
+
+    async findAll(req, res) {
+        Resposta_Aberta.findAll({
+            include: [
+                {
+                    model: usuario,
+                    as: 'usuario'
+                },
+                {
+                    model: aplicacao,
+                    as: 'aplicacao'
+                },
+                {
+                    model: questao,
+                    as: 'questao'
+                }
+            ]
         })
-    })
+            .then(data => {
+                res.send(data)
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || 'Some error occurred.'
+                })
+            })
+    }
 }

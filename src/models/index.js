@@ -58,13 +58,11 @@ db.avaliacao.belongsToMany(db.questao, {
 //AlunoDisciplina
 db.usuario.belongsToMany(db.disciplina, {
   through: "aluno_disciplina",
-  as: "usuario_aluno",
   foreignKey: "usuario_id",
 });
 
 db.disciplina.belongsToMany(db.usuario, {
   through: "aluno_disciplina",
-  as: "disciplina_aluno",
   foreignKey: "disciplina_id",
 });
 
@@ -96,10 +94,15 @@ db.questao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
 //RespostaAberta
 db.usuario.hasMany(db.resposta_aberta, {foreignKey: 'idUsuario'});
 db.resposta_aberta.belongsTo(db.usuario, {foreignKey: 'idUsuario'})
+
 db.aplicacao.hasMany(db.resposta_aberta, {foreignKey: 'idAplicacao'});
 db.resposta_aberta.belongsTo(db.aplicacao, {foreignKey: 'idAplicacao'})
+
 db.questao.hasMany(db.resposta_aberta, {foreignKey: 'idQuestao'});
 db.resposta_aberta.belongsTo(db.questao, {foreignKey: 'idQuestao'})
 
+
+db.disciplina.hasMany(db.aplicacao, { foreignKey: 'idDisciplina' });
+db.aplicacao.belongsTo(db.disciplina, { foreignKey: 'idDisciplina'})
 
 module.exports = db;

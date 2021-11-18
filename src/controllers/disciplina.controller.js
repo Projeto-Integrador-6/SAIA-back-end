@@ -1,64 +1,61 @@
 const db = require('../models/index.js')
 const Disciplina = db.disciplina
 
-exports.create = (req, res) => {
-    const disciplina = {
-        nome: req.body.nome
-        
-    }
-
-    Disciplina.create(disciplina)
-        .then(data => {
-            res.send(data)
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || 'Some error occurred...'
-            })
-        })
-}
-
-exports.findAll = (req, res) => {
-    Disciplina.findAll()
-    .then(data => {
-        res.send(data)
-    })
-    .catch(err => {
-        res.status(500).send({
-            message:
-                err.message || 'Some error occurred.'
-        })
-    })
-}
-
-exports.findOne = (req, res) => {
-    const id = req.params.id;
-  
-    Disciplina.findByPk(id)
-      .then(data => {
-        if (data) {
-          res.send(data);
-        } else {
-          res.status(404).send({
-            message: `${id}`
-          });
+module.exports = {
+    async create(req, res) {
+        const disciplina = {
+            nome: req.body.nome
         }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error:" + id
-        });
-      });
-  };
 
-    exports.update = async (req, res) => {
+        await Disciplina.create(disciplina)
+            .then(data => {
+                res.send(data)
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || 'Some error occurred...'
+                })
+            })
+    },
+
+    async findAll(req, res) {
+        await Disciplina.findAll()
+            .then(data => {
+                res.send(data)
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || 'Some error occurred.'
+                })
+            })
+    },
+
+    async findOne(req, res) {
+        const id = req.params.id;
+
+        await Disciplina.findByPk(id)
+            .then(data => {
+                if (data) {
+                    res.send(data);
+                } else {
+                    res.status(404).send({
+                        message: `${id}`
+                    });
+                }
+            })
+    },
+
+
+    async update(req, res) {
         const id = req.params.id;
         const nome = req.body.nome;
-        
+
         Disciplina.update(
-                { nome: nome },
-                { where: { idDisciplina: id } 
+            { nome: nome },
+            {
+                where: { idDisciplina: id }
             })
             .then(data => {
                 res.status(200).json({
@@ -70,23 +67,29 @@ exports.findOne = (req, res) => {
                     error: "Ocorreu um erro ao editar a disciplina."
                 })
             })
-    
-    }
 
-exports.delete = (req, res) => {  
-    Disciplina.destroy({
-        where: {
-            idDisciplina: req.body.idDisciplina
-        }
-    })
-        .then(data => {
-            res.send(data)
+    },
+
+    async delete(req, res) {
+        Disciplina.destroy({
+            where: {
+                idDisciplina: req.body.idDisciplina
+            }
         })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || 'Some error occurred...'
+            .then(data => {
+                res.send(data)
             })
-        })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || 'Some error occurred...'
+                })
+                    .catch(err => {
+                        res.status(500).send({
+                            message: "Error:" + id
+                        });
+                    });
+            })
+    }
 
 }
