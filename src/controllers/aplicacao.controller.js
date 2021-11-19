@@ -137,6 +137,7 @@ module.exports = {
                 dataFim: dataFim,
                 idAvaliacao: aplicacao.idAvaliacao,
                 idUsuario: aplicacao.idUsuario,
+                idDisciplina: aplicacao.idDisciplina,
                 nome: `Aplicação da Avaliação: ${avaliacao.nome} - ${dataFim}`
             }, { where: { idAplicacao: id } });
 
