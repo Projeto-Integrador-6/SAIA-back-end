@@ -27,7 +27,7 @@ module.exports = {
             }
             
             const usuario = await Usuario.findOne({ where: { idUsuario: idUsuario } });
-            
+
             if (!usuario) {
                 return res.status(404).send({
                     message: "Usuário não encontrado!"
@@ -54,6 +54,8 @@ module.exports = {
              }
 
              await transaction.commit();
+
+             res.status(200).json({ sucess: "Respostas registradas com sucesso!" })
 
         } catch (err) {
             transaction.rollback();

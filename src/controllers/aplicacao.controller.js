@@ -22,18 +22,18 @@ module.exports = {
 
         try {
 
-            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao }})
+            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao } })
 
-            const newAplicacao = await Aplicacao.create({
+            await Aplicacao.create({
                 idUsuario: idUsuario,
                 valor: valor,
                 dataInicio: dataInicio,
                 dataFim: dataFim,
                 idAvaliacao: idAvaliacao,
                 idDisciplina: idDisciplina,
-                nome: `${avaliacao.nome} - ${dataInicio}`
+                nome: `${avaliacao.nome} - ${dataFormatada}`
             })
-            nome = `Aplicação ${newAplicacao.dataInicio}`
+
 
             await transaction.commit();
             res.status(200).json({ sucess: "Aplicação criada com sucesso" })
@@ -48,7 +48,7 @@ module.exports = {
         const usuario = req.params.usuario;
 
         try {
-            const aplicacao = await Aplicacao.findAll({ where: { idUsuario: usuario }});
+            const aplicacao = await Aplicacao.findAll({ where: { idUsuario: usuario } });
             res.status(200).json({ result: aplicacao });
         } catch (err) {
             res.status(400).json({ error: "Ocorreu um erro durante a busca." });
@@ -64,7 +64,7 @@ module.exports = {
 
             if (aplicacao == null) {
                 return res.status(400).send({ err: "Aplicação não encontrada." });
-            }            
+            }
             res.status(200).json({ aplicacao });
 
         } catch (err) {
@@ -73,19 +73,19 @@ module.exports = {
 
     },
 
-    async findByUser(req, res){
+    async findByUser(req, res) {
         const idUsuario = req.params.usuario;
 
         try {
             const aluno_disciplina = await AlunoDisciplina.findAll({ where: { usuario_id: idUsuario } });
-            
+
             const idDisciplinas = []
 
-            for(let i = 0; i < aluno_disciplina.length; i++){
+            for (let i = 0; i < aluno_disciplina.length; i++) {
                 idDisciplinas.push(aluno_disciplina[i].disciplina_id);
             }
 
-            const aplicacao = await Aplicacao.findAll({ where: { idDisciplina: idDisciplinas }})
+            const aplicacao = await Aplicacao.findAll({ where: { idDisciplina: idDisciplinas } })
 
             res.status(200).json({ result: aplicacao });
 
@@ -94,11 +94,11 @@ module.exports = {
         }
     },
 
-    async findAvaliacaoByAplicacao(req, res){
+    async findAvaliacaoByAplicacao(req, res) {
         const idAplicacao = req.params.aplicacao;
 
         try {
-            const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: idAplicacao }});
+            const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: idAplicacao } });
 
             const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: aplicacao.idAvaliacao }, include: Questao });
 
@@ -109,7 +109,7 @@ module.exports = {
         }
     },
 
-    async update(req, res){
+    async update(req, res) {
         const id = req.params.id;
 
         const {
@@ -123,7 +123,7 @@ module.exports = {
 
         try {
 
-            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao }})
+            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao } })
 
             const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: id } });
 
@@ -142,7 +142,7 @@ module.exports = {
 
             await transaction.commit();
             res.status(200).json({ success: "Aplicação foi atualizada com sucesso." });
-            
+
         } catch (err) {
             transaction.rollback();
             res.status(400).json({ error: "Ocorreu um erro ao editar a aplicação." });
