@@ -5,7 +5,7 @@ const Sequelize = require('../database/db');
 const Usuario = db.usuario
 const Aplicacao = db.aplicacao
 const Questao = db.questao
-const Resposta_Aberta = db.resposta_aberta
+const Resposta = db.resposta
 
 module.exports = {
     async create(req, res) {
@@ -45,7 +45,7 @@ module.exports = {
                     })
                 }
 
-                await Resposta_Aberta.create({
+                await Resposta.create({
                     idAplicacao: idAplicacao,
                     idUsuario: idUsuario,
                     idQuestao: resposta[i].idQuestao,
@@ -65,7 +65,7 @@ module.exports = {
     },
 
     async findAll(req, res) {
-        Resposta_Aberta.findAll({
+        Resposta.findAll({
             include: [
                 {
                     model: usuario,
