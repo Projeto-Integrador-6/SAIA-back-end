@@ -26,4 +26,17 @@ module.exports = {
             res.status(400).json({ error: "Ocorreu um erro ao realizar a busca." });
         }
     },
+
+    async delete(req, res){
+        const idUsuario = req.params.usuario;
+        const idDisciplina = req.params.disciplina;
+
+        try {
+            await Aluno_Disciplina.destroy({ where: { usuario_id: idUsuario, disciplina_id: idDisciplina }})
+            res.status(200).json({ success: "Aluno foi desvinculado a disciplina"});
+        } catch (err) {
+            console.log(err)
+            res.status(400).json({ error: "Ocorreu um erro ao desvincular o aluno da disciplina." });
+        }
+    }
 }
