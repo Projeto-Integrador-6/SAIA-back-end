@@ -36,7 +36,7 @@ module.exports = {
 
 
             await transaction.commit();
-            res.status(200).json({ sucess: "Aplicação criada com sucesso" })
+            res.status(200).json({ success: "Aplicação criada com sucesso" })
         } catch (err) {
             transaction.rollback();
             console.log(err)

@@ -81,6 +81,28 @@ module.exports = {
     }
   },
 
+  async findByType(req, res) {
+    const type = req.params.type;
+
+    try {
+      const usuarios = await Usuario.findAll({ where: { tipoUsuario: type } })
+
+      if (usuarios == null) {
+        return res.status(400).send({ err: "Usuário não encontrado." });
+      }
+
+      for(let i = 0; i < usuarios.length; i++){
+        usuarios[i].password = undefined;
+      }
+
+      res.status(200).json({ result: usuarios });
+
+    } catch (err) {
+      res.status(400).json({ error: "Ocorreu um erro durante a busca." });
+    }
+  },
+
+
   async update(req, res){
     const id = req.params.id;
 

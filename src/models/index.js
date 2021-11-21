@@ -58,11 +58,13 @@ db.avaliacao.belongsToMany(db.questao, {
 //AlunoDisciplina
 db.usuario.belongsToMany(db.disciplina, {
   through: "aluno_disciplina",
+  as: "disciplina_aluno",
   foreignKey: "usuario_id",
 });
 
 db.disciplina.belongsToMany(db.usuario, {
   through: "aluno_disciplina",
+  as: "disciplina_aluno",
   foreignKey: "disciplina_id",
 });
 

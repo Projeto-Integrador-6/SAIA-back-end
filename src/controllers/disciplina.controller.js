@@ -1,5 +1,7 @@
-const db = require('../models/index.js')
-const Disciplina = db.disciplina
+const db = require('../models/index.js');
+
+const Disciplina = db.disciplina;
+const Usuario = db.usuario;
 
 module.exports = {
     async create(req, res) {
@@ -47,7 +49,46 @@ module.exports = {
             })
     },
 
+    async findByDiscipline(req, res) {
+        const id = req.params.id;
+        const type = req.params.type;
 
+        try {
+
+            if(type == 'alunos'){
+                const aluno_disciplina = await Disciplina.findOne({
+                    where: { idDisciplina: id }, include: {
+                        model: Usuario,
+                        as: "disciplina_aluno",
+                        attributes: {
+                            exclude: ['password']
+                        }
+                    }
+                });
+
+                res.status(200).json({ result: aluno_disciplina });
+            }
+
+            if(type == 'professores'){
+                const professor_disciplina = await Disciplina.findOne({
+                    where: { idDisciplina: id }, include: {
+                        model: Usuario,
+                        as: "disciplina_professor",
+                        attributes: {
+                            exclude: ['password']
+                        }
+                    }
+                });
+
+                res.status(200).json({ result: professor_disciplina });
+            }
+             
+            
+        } catch (err) {
+            res.status(400).json({ error: "Ocorreu um erro ao realizar a busca." });
+        }
+    },
+    
     async update(req, res) {
         const id = req.params.id;
         const nome = req.body.nome;
