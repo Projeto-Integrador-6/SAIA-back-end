@@ -24,6 +24,9 @@ module.exports = {
 
             const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao } })
 
+            let data = new Date(dataInicio);
+            let dataFormatada = ((data.getDate() + '-' + (data.getMonth()) + '-' + data.getFullYear()));
+
             await Aplicacao.create({
                 idUsuario: idUsuario,
                 valor: valor,
