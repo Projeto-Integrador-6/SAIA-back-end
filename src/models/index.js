@@ -24,7 +24,6 @@ db.questao_avaliacao = require('./questao_avaliacao.model.js')(sequelize, DataTy
 db.aplicacao = require('./aplicacao.model.js')(sequelize, DataTypes)
 db.resposta = require('./resposta.model.js')(sequelize, DataTypes)
 
-
 db.questao.belongsToMany(db.tag, {
   through: "questao_tag",
   foreignKey: "questao_id",
