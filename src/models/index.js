@@ -15,7 +15,6 @@ db.usuario = require('./usuario.model.js')(sequelize, DataTypes)
 db.disciplina = require('./disciplina.model.js')(sequelize, DataTypes)
 db.aluno_disciplina = require('./aluno_disciplina.model.js')(sequelize, DataTypes)
 db.professor_disciplina = require('./professor_disciplina.model.js')(sequelize, DataTypes)
-db.tipoQuestao = require("./tipoQuestao.model.js")(sequelize, DataTypes);
 db.tag = require("./tag.model.js")(sequelize, DataTypes)
 db.questao = require("./questao.model.js")(sequelize, DataTypes)
 db.alternativa = require("./alternativa.model.js")(sequelize, DataTypes)
@@ -25,8 +24,6 @@ db.questao_avaliacao = require('./questao_avaliacao.model.js')(sequelize, DataTy
 db.aplicacao = require('./aplicacao.model.js')(sequelize, DataTypes)
 
 
-db.tipoQuestao.hasMany(db.questao, {foreignKey: 'idTipoQuestao'})
-db.questao.belongsTo(db.tipoQuestao, {foreignKey: 'idTipoQuestao'})
 
 
 

@@ -12,7 +12,6 @@ module.exports = {
             nome,
             enunciado,
             valor,
-            idTipoQuestao,
             alternativas,
             tags
         } = req.body
@@ -24,7 +23,6 @@ module.exports = {
                 nome: nome,
                 enunciado: enunciado,
                 valor: valor,
-                idTipoQuestao: idTipoQuestao
             })
 
             if (alternativas !== undefined) {
@@ -112,8 +110,7 @@ module.exports = {
             await Questao.update({
                 nome: nome,
                 enunciado: enunciado,
-                valor: valor,
-                idTipoQuestao: questao.idTipoQuestao
+                valor: valor
             }, { where: { idQuestao: id } });
 
 
