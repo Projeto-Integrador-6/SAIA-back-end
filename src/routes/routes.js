@@ -13,6 +13,8 @@ const QuestaoAvaliacao = require('./questao_avaliacao.routes');
 const Aplicacao = require('./aplicacao.routes');
 const Tag = require('./tag.routes');
 const QuestaoTag = require('./questao_tag.routes');
+const Resposta = require('./resposta.routes')
+const AnaliseDados = require('./analiseDados.routes')
 
 routes.use(Auth);
 routes.use(Usuario);
@@ -27,5 +29,7 @@ routes.use(QuestaoAvaliacao);
 routes.use(Aplicacao);
 routes.use(Tag);
 routes.use(QuestaoTag);
+routes.use(Resposta)
+routes.use(AnaliseDados)
 
 module.exports = routes;

@@ -12,9 +12,9 @@ app.use(routes);
 
 const db = require('./models/index.js');
 
-//  db.sequelize.sync({ force: true }).then(() => {
-//     console.log("Drop and re-sync db.");
-//  });
+// db.sequelize.sync({ force: true }).then(() => {
+//    console.log("Drop and re-sync db.");
+// });
 
-const porta = 3002;
+const porta = 3001;
 app.listen(porta, () => {console.log(`Aplicação rodando com SUCESSO na porta ${porta}! 🚀`)});

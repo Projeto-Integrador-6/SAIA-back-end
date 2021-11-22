@@ -22,8 +22,7 @@ db.avaliacao = require('./avalicao.model.js')(sequelize, DataTypes)
 db.questao_tag = require('./questao_tag.model.js')(sequelize, DataTypes)
 db.questao_avaliacao = require('./questao_avaliacao.model.js')(sequelize, DataTypes)
 db.aplicacao = require('./aplicacao.model.js')(sequelize, DataTypes)
-
-
+db.resposta = require('./resposta.model.js')(sequelize, DataTypes)
 
 
 
@@ -45,20 +44,18 @@ db.aplicacao.belongsTo(db.avaliacao, {foreignKey: 'idAvaliacao'})
 
 db.questao.belongsToMany(db.avaliacao, {
   through: "questao_avaliacao",
-  as: "questao_av",
   foreignKey: "questao_id",
 });
 
 db.avaliacao.belongsToMany(db.questao, {
   through: "questao_avaliacao",
-  as: "avaliacao_av",
   foreignKey: "avaliacao_id",
 });
 
 //AlunoDisciplina
 db.usuario.belongsToMany(db.disciplina, {
   through: "aluno_disciplina",
-  as: "usuario_aluno",
+  as: "disciplina_aluno",
   foreignKey: "usuario_id",
 });
 
@@ -81,12 +78,30 @@ db.disciplina.belongsToMany(db.usuario, {
   foreignKey: "disciplina_id",
 });
 
-db.disciplina.hasMany(db.avaliacao, {foreignKey: 'idDisciplina'});
-db.avaliacao.belongsTo(db.disciplina, {foreignKey: 'idDisciplina'});
+db.disciplina.hasMany(db.aplicacao, { foreignKey: 'idDisciplina' });
+db.aplicacao.belongsTo(db.disciplina, { foreignKey: 'idDisciplina' });
+
+db.usuario.hasMany(db.aplicacao, {foreignKey: 'idUsuario'});
+db.aplicacao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
 
 db.usuario.hasMany(db.avaliacao, {foreignKey: 'idUsuario'});
 db.avaliacao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
 
 db.usuario.hasMany(db.questao, {foreignKey: 'idUsuario'});
 db.questao.belongsTo(db.usuario, {foreignKey: 'idUsuario'});
+
+//Resposta
+db.usuario.hasMany(db.resposta, {foreignKey: 'idUsuario'});
+db.resposta.belongsTo(db.usuario, {foreignKey: 'idUsuario'})
+
+db.aplicacao.hasMany(db.resposta, {foreignKey: 'idAplicacao'});
+db.resposta.belongsTo(db.aplicacao, {foreignKey: 'idAplicacao'})
+
+db.questao.hasMany(db.resposta, {foreignKey: 'idQuestao'});
+db.resposta.belongsTo(db.questao, {foreignKey: 'idQuestao'})
+
+
+db.disciplina.hasMany(db.aplicacao, { foreignKey: 'idDisciplina' });
+db.aplicacao.belongsTo(db.disciplina, { foreignKey: 'idDisciplina'})
+
 module.exports = db;
