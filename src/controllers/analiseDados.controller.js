@@ -1,7 +1,7 @@
 const { sequelize } = require('../models/index.js');
 const db = require('../models/index.js')
 
-exports.findAll = async (req, res) => {
+exports.analise = async (req, res) => {
     //const idUsuario = req.body.idUsuario;
     const idAplicacao = req.params.id;
 

@@ -3,6 +3,6 @@ const route = express.Router();
 
 const AnaliseDados = require('../controllers/analiseDados.controller.js')
 
-route.get('/analise/:id', AnaliseDados.findAll);
+route.get('/analise/:id', AnaliseDados.analise);
 
 module.exports = route;
