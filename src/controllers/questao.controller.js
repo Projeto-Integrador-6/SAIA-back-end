@@ -13,7 +13,6 @@ module.exports = {
             nome,
             enunciado,
             valor,
-            idTipoQuestao,
             alternativas,
             tags
         } = req.body
@@ -30,8 +29,7 @@ module.exports = {
                 idUsuario: idUsuario,
                 nome: nome,
                 enunciado: enunciado,
-                valor: valor,
-                idTipoQuestao: idTipoQuestao
+                valor: valor
             })
 
             if (alternativas !== undefined) {
@@ -123,8 +121,7 @@ module.exports = {
                 idUsuario: questao.idUsuario,
                 nome: nome,
                 enunciado: enunciado,
-                valor: valor,
-                idTipoQuestao: questao.idTipoQuestao
+                valor: valor
             }, { where: { idQuestao: id } });
 
 

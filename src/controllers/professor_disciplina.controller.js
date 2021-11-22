@@ -19,7 +19,7 @@ module.exports = {
             res.status(200).json({ success: "O professor foi vinculado com sucesso a disciplina." })
 
         } catch (err) {
-            
+            res.status(400).json({ error: "Ocorreu um erro ao vincular o professor a disciplina." });
         }
     },
 
@@ -40,7 +40,6 @@ module.exports = {
             await Professor_Disciplina.destroy({ where: { usuario_id: idUsuario, disciplina_id: idDisciplina }})
             res.status(200).json({ success: "Professor foi desvinculado a disciplina"});
         } catch (err) {
-            console.log(err)
             res.status(400).json({ error: "Ocorreu um erro ao desvincular o professor da disciplina." });
         }
     }

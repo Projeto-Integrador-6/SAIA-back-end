@@ -4,17 +4,23 @@ const Aluno_Disciplina = db.aluno_disciplina;
 
 module.exports = {
     async create(req, res) {
-        const aluno_disciplina = {
-            usuario_id: req.body.usuario_id,
-            disciplina_id: req.body.disciplina_id,
-        }
+        const {
+            alunos
+        } = req.body
 
         try {
-            await Aluno_Disciplina.create(aluno_disciplina);
+
+            for(let i = 0; i < alunos.length; i++){
+                await Aluno_Disciplina.create({
+                    usuario_id: alunos[i].usuario_id,
+                    disciplina_id: alunos[i].disciplina_id,
+                });
+            }
+
             res.status(200).json({ success: "Aluno foi vinculado com sucesso a disciplina." })
 
         } catch (err) {
-            
+            res.status(400).json({ error: "Ocorreu um erro ao desvincular o aluno a disciplina." });
         }
     },
 
