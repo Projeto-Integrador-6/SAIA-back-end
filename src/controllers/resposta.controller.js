@@ -34,8 +34,6 @@ module.exports = {
                 })
             }
 
-
-            
             for (let i = 0; i < resposta.length; i++) {
 
                 const questao = await Questao.findOne({ where: { idQuestao: resposta[i].idQuestao } });
@@ -55,7 +53,7 @@ module.exports = {
 
              await transaction.commit();
 
-             res.status(200).json({ sucess: "Respostas registradas com sucesso!" })
+             res.status(201).json({ sucess: "Respostas registradas com sucesso!" })
 
         } catch (err) {
             transaction.rollback();

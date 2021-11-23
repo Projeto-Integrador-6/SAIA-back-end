@@ -4,7 +4,7 @@ const Sequelize = require('../database/db');
 const bcrypt = require('bcrypt');
 const authConfig = require('../config/auth');
 
-const Usuario = db.usuario
+const Usuario = db.usuario;
 
 module.exports = {
   async create(req, res) {
@@ -26,7 +26,7 @@ module.exports = {
           tipoUsuario: tipoUsuario,
           password: password
         }).then(usuario => {
-          
+
           usuario.password = undefined;
 
           res.json({
@@ -51,7 +51,7 @@ module.exports = {
     try {
       const usuarios = await Usuario.findAll();
 
-      for(let i = 0; i < usuarios.length; i++){
+      for (let i = 0; i < usuarios.length; i++) {
         usuarios[i].password = undefined;
       }
 
@@ -71,9 +71,19 @@ module.exports = {
         return res.status(400).send({ err: "Usuário não encontrado." });
       }
 
+      const disciplina = await Sequelize.query(`
+        SELECT 
+        d.nome
+        FROM usuario AS U
+        LEFT JOIN aluno_disciplina AS AD ON AD.usuario_id = U.idUsuario
+        LEFT JOIN professor_disciplina AS PD ON PD.usuario_id = U.idUsuario
+        INNER JOIN disciplina AS D ON D.idDisciplina = AD.disciplina_id OR D.idDisciplina = PD.disciplina_id
+        WHERE U.idUsuario = :idUsuario
+      `, { replacements: { idUsuario: id }, type: Sequelize.QueryTypes.SELECT })
+
       usuario.password = undefined;
 
-      res.status(200).json({ usuario });
+      res.status(200).json({ usuario, disciplinas: disciplina });
 
     } catch (err) {
       console.log(err)
@@ -91,7 +101,7 @@ module.exports = {
         return res.status(400).send({ err: "Usuário não encontrado." });
       }
 
-      for(let i = 0; i < usuarios.length; i++){
+      for (let i = 0; i < usuarios.length; i++) {
         usuarios[i].password = undefined;
       }
 
@@ -102,40 +112,83 @@ module.exports = {
     }
   },
 
+  async status(req, res) {
+    const id = req.params.id;
 
-  async update(req, res){
+    try {
+      const usuario = await Usuario.findOne({ where: { idUsuario: id } })
+
+      if (usuario == null) {
+        return res.status(400).send({ err: "Usuário não encontrado." });
+      }
+
+      const avaliacoes = await Sequelize.query(`
+        SELECT count(idAvaliacao) as AvaliacoesCriadas 
+        FROM avaliacao
+        WHERE idUsuario = ${id}
+      `, { type: Sequelize.QueryTypes.SELECT })
+
+      const aplicacoes = await Sequelize.query(`
+        SELECT count(idAplicacao) as AvaliacoesEmAndamento
+        FROM aplicacao
+        WHERE idUsuario = ${id}
+        AND dataFim > Now()
+      `, { type: Sequelize.QueryTypes.SELECT })
+
+      res.status(200).json({ avaliacoes, aplicacoes });
+
+    } catch (err) {
+      return res.status(400).send({ err: "Erro ao buscar os dados." });
+    }
+
+  },
+
+  async update(req, res) {
     const id = req.params.id;
 
     const {
-        nome,
-        email,
-        tipoUsuario,
-        password
+      nome,
+      email,
+      tipoUsuario,
+      password
     } = req.body
 
     const transaction = await Sequelize.transaction();
 
     try {
-        const usuario = await Usuario.findOne({ where: { idUsuario: id }})
+      const usuario = await Usuario.findOne({ where: { idUsuario: id } })
 
-        if (usuario == null) {
-            return res.status(400).send({ err: "Usuário não encontrado." });
-        }            
+      if (usuario == null) {
+        return res.status(400).send({ err: "Usuário não encontrado." });
+      }
+
+
+      if (password != null) {
+        var passwordCrypt = bcrypt.hashSync(password, Number.parseInt(authConfig.rounds));
 
         await Usuario.update({
-            nome: nome,
-            email: email,
-            tipoUsuario: tipoUsuario,
-            password: password
+          nome: nome,
+          email: email,
+          tipoUsuario: tipoUsuario,
+          password: passwordCrypt
         }, { where: { idUsuario: id } });
 
-        await transaction.commit();
-        res.status(200).json({ success: "Usuário foi atualizado com sucesso." });
-        
+      } else {
+        await Usuario.update({
+          nome: nome,
+          email: email,
+          tipoUsuario: tipoUsuario
+        }, { where: { idUsuario: id } });
+
+      }
+
+      await transaction.commit();
+      res.status(200).json({ success: "Usuário foi atualizado com sucesso." });
+
     } catch (err) {
-        transaction.rollback();
-        res.status(400).json({ error: "Ocorreu um erro ao editar o usuário." });
+      transaction.rollback();
+      res.status(400).json({ error: "Ocorreu um erro ao editar o usuário." });
     }
-},
+  },
 
 }

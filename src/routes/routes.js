@@ -22,7 +22,6 @@ routes.use(Usuario);
 routes.use(Disciplina);
 routes.use(AlunoDisciplina);
 routes.use(ProfessorDisciplina);
-
 routes.use(QuestaoRoutes);
 routes.use(AlternativaRoutes);
 routes.use(Avaliacao);

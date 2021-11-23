@@ -29,7 +29,7 @@ module.exports = {
                 idUsuario: idUsuario,
                 nome: nome,
                 enunciado: enunciado,
-                valor: valor,
+                valor: valor
             })
 
             if (alternativas !== undefined) {

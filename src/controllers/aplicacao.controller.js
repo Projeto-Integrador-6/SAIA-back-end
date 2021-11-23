@@ -1,10 +1,11 @@
-const db = require('../models/index.js')
+const db = require('../models/index.js');
 const Sequelize = require('../database/db');
 
 const Aplicacao = db.aplicacao;
 const Avaliacao = db.avaliacao;
 const Questao = db.questao;
-
+const Alternativa = db.alternativa;
+const Disciplina = db.disciplina;
 const AlunoDisciplina = db.aluno_disciplina;
 
 module.exports = {
@@ -88,7 +89,7 @@ module.exports = {
                 idDisciplinas.push(aluno_disciplina[i].disciplina_id);
             }
 
-            const aplicacao = await Aplicacao.findAll({ where: { idDisciplina: idDisciplinas } })
+            const aplicacao = await Aplicacao.findAll({ where: { idDisciplina: idDisciplinas }, include: [{ model: Disciplina }] })
 
             res.status(200).json({ result: aplicacao });
 
@@ -101,11 +102,31 @@ module.exports = {
         const idAplicacao = req.params.aplicacao;
 
         try {
-            const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: idAplicacao } });
+            const aplicacao = await Aplicacao.findOne({
+                where: {
+                    idAplicacao: idAplicacao
+                },
+                attributes: {
+                    exclude: ['idUsuario']
+                },
+                include: [{
+                    model: Avaliacao,
+                    include: [{
+                        model: Questao,
+                        attributes: {
+                            exclude: ['valor', 'idUsuario']
+                        },
+                        include: [{
+                            model: Alternativa,
+                            attributes: {
+                                exclude: ['isAlternativaCorreta', 'idQuestao']
+                            }
+                        }]
+                    }]
+                }]
+            });
 
-            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: aplicacao.idAvaliacao }, include: Questao });
-
-            res.status(200).json({ result: avaliacao });
+            res.status(200).json({ result: aplicacao });
 
         } catch (err) {
             res.status(400).json({ error: "Ocorreu um erro ao buscar a avaliação." });
@@ -118,16 +139,12 @@ module.exports = {
         const {
             valor,
             dataInicio,
-            dataFim,
-            idAvaliacao
+            dataFim
         } = req.body
 
         const transaction = await Sequelize.transaction();
 
         try {
-
-            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: idAvaliacao } })
-
             const aplicacao = await Aplicacao.findOne({ where: { idAplicacao: id } });
 
             if (aplicacao == null) {
@@ -140,8 +157,7 @@ module.exports = {
                 dataFim: dataFim,
                 idAvaliacao: aplicacao.idAvaliacao,
                 idUsuario: aplicacao.idUsuario,
-                idDisciplina: aplicacao.idDisciplina,
-                nome: `Aplicação da Avaliação: ${avaliacao.nome} - ${dataFim}`
+                idDisciplina: aplicacao.idDisciplina
             }, { where: { idAplicacao: id } });
 
             await transaction.commit();

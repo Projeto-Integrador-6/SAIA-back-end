@@ -1,10 +1,10 @@
 const db = require('../models/index.js')
 const Sequelize = require('../database/db');
 
-
 const Avaliacao = db.avaliacao;
 const Questao = db.questao;
-const TipoQuestao = db.questao_avaliacao;
+const QuestaoAvaliacao = db.questao_avaliacao;
+const Alternativa = db.alternativa;
 
 module.exports = {
     async create(req, res) {
@@ -19,35 +19,35 @@ module.exports = {
 
         try {
 
-            if(idUsuario == null){
+            if (idUsuario == null) {
                 res.status(400).json({ error: "Insira o id do usuário para criar uma avaliação." });
             }
 
-            const newAvaliacao = await Avaliacao.create({
+            const avaliacao = await Avaliacao.create({
                 idUsuario: idUsuario,
                 nome: nome,
                 descricao: descricao
             })
 
-            for(let j = 0; j < questoes.length; j++) {
+            for (let j = 0; j < questoes.length; j++) {
                 const questao = await Questao.findOne({ where: { idQuestao: questoes[j].idQuestao } });
 
-                if(questao == null){
+                if (questao == null) {
                     res.status(400).json({ error: "Ocorreu um erro." });
                 }
 
-                await TipoQuestao.create({
+                await QuestaoAvaliacao.create({
                     questao_id: questoes[j].idQuestao,
-                    avaliacao_id: newAvaliacao.idAvaliacao
+                    avaliacao_id: avaliacao.idAvaliacao
                 })
             }
 
             await transaction.commit();
 
-            res.status(200).json({ sucess: "Avaliação criada com sucesso"})
+            res.status(200).json({ sucess: "Avaliação criada com sucesso" })
         } catch (err) {
             transaction.rollback();
-            res.status(400).json({ error: "Ocorreu um erro."})
+            res.status(400).json({ error: "Ocorreu um erro." })
         }
     },
 
@@ -55,7 +55,7 @@ module.exports = {
         const usuario = req.params.usuario;
 
         try {
-            const avaliacao = await Avaliacao.findAll({ where: { idUsuario: usuario }});
+            const avaliacao = await Avaliacao.findAll({ where: { idUsuario: usuario } });
             res.status(200).json({ result: avaliacao });
         } catch (err) {
             res.status(400).json({ error: "Ocorreu um erro durante a busca." });
@@ -66,11 +66,28 @@ module.exports = {
         const id = req.params.id;
 
         try {
-            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: id }, include: Questao })
+            const avaliacao = await Avaliacao.findOne({
+                where: {
+                    idAvaliacao: id
+                },
+                include: [{
+                    model: Questao,
+                    attributes: {
+                        exclude: ['idUsuario']
+                    },
+                    include: [{
+                        model: Alternativa,
+                        attributes: {
+                            exclude: ['idQuestao']
+                        }
+                    }]
+                }]
+
+            })
 
             if (avaliacao == null) {
                 return res.status(400).send({ err: "Avaliação não encontrada." });
-            }            
+            }
             res.status(200).json({ avaliacao });
 
         } catch (err) {
@@ -79,8 +96,8 @@ module.exports = {
         }
 
     },
-    
-    async update(req, res){
+
+    async update(req, res) {
         const id = req.params.id;
 
         const {
@@ -91,11 +108,11 @@ module.exports = {
         const transaction = await Sequelize.transaction();
 
         try {
-            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: id }})
+            const avaliacao = await Avaliacao.findOne({ where: { idAvaliacao: id } })
 
             if (avaliacao == null) {
                 return res.status(400).send({ err: "Avaliação não encontrada." });
-            }            
+            }
 
             await Avaliacao.update({
                 idUsuario: avaliacao.idUsuario,
@@ -105,7 +122,7 @@ module.exports = {
 
             await transaction.commit();
             res.status(200).json({ success: "Avaliação foi atualizada com sucesso." });
-            
+
         } catch (err) {
             transaction.rollback();
             res.status(400).json({ error: "Ocorreu um erro ao editar a avaliação." });

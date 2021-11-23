@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const resposta = sequelize.define('resposta', 
     {
         resposta: {
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
               isAlphanumeric: {
