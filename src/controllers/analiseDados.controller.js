@@ -1,15 +1,14 @@
-const { sequelize } = require('../models/index.js');
-const db = require('../models/index.js')
+const Sequelize = require('../database/db');
 
 exports.analise = async (req, res) => {
     //const idUsuario = req.body.idUsuario;
     const idAplicacao = req.params.id;
 
-    const [Prova] = await sequelize.query(`select valor as value,nome as label from aplicacao where idAplicacao = :idAplicacao`,
+    const [Prova] = await Sequelize.query(`select valor as value, nome as label from aplicacao where idAplicacao = :idAplicacao`,
     {
         replacements: { idAplicacao: idAplicacao }
     })
-    const [erroAcerto] = await sequelize.query(`
+    const [erroAcerto] = await Sequelize.query(`
         SELECT distinct(questao.nome) AS name,
         sum(resposta.resposta = alternativa.idAlternativa
             AND alternativa.isAlternativaCorreta = TRUE) AS Acertos,
@@ -23,7 +22,7 @@ exports.analise = async (req, res) => {
     ,{
         replacements: { idAplicacao: idAplicacao }
     })
-    const [porcentagem] = await sequelize.query(`select
+    const [porcentagem] = await Sequelize.query(`select
         aplicacao.nome as name,
         concat(round(( sum(resposta.resposta = alternativa.isAlternativaCorreta)/count(resposta) * 100 ),2),'%') AS hitPercentage,
         concat(round(( sum(resposta.resposta <> alternativa.isAlternativaCorreta)/count(resposta) * 100 ),2),'%') AS errorPercentage,
@@ -42,7 +41,7 @@ exports.analise = async (req, res) => {
     ,{
         replacements: { idAplicacao: idAplicacao}
     })
-    const [selecionaAlternativa] = await sequelize.query(`select  
+    const [selecionaAlternativa] = await Sequelize.query(`select  
         distinct(questao.nome) as name, 
         sum(resposta = 0) as "Alternativa A", 
         sum(resposta = 1) as "Alternativa B",
