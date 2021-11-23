@@ -34,8 +34,6 @@ module.exports = {
                 })
             }
 
-
-            
             for (let i = 0; i < resposta.length; i++) {
 
                 const questao = await Questao.findOne({ where: { idQuestao: resposta[i].idQuestao } });

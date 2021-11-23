@@ -46,6 +46,7 @@ module.exports = {
 
             res.status(200).json({ sucess: "Avaliação criada com sucesso" })
         } catch (err) {
+            console.log(err)
             transaction.rollback();
             res.status(400).json({ error: "Ocorreu um erro." })
         }

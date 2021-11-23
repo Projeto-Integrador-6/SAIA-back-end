@@ -9,16 +9,17 @@ exports.analise = async (req, res) => {
     {
         replacements: { idAplicacao: idAplicacao }
     })
-    const [erroAcerto] = await sequelize.query(`select
-        distinct(questao.nome) as name,
-        sum(resposta.resposta = alternativa.isAlternativaCorreta) as Acertos,
-        sum(resposta.resposta <> alternativa.isAlternativaCorreta) as Erros
-        from resposta
-        inner join questao on resposta.idQuestao = questao.idQuestao
-        left join alternativa on resposta.idQuestao = alternativa.idQuestao
-        where 
-        idAplicacao = :idAplicacao
-        group by name`
+    const [erroAcerto] = await sequelize.query(`
+        SELECT distinct(questao.nome) AS name,
+        sum(resposta.resposta = alternativa.idAlternativa
+            AND alternativa.isAlternativaCorreta = TRUE) AS Acertos,
+        sum(resposta.resposta = alternativa.idAlternativa
+        AND alternativa.isAlternativaCorreta = FALSE) AS Erros
+        FROM resposta
+        INNER JOIN questao ON resposta.idQuestao = questao.idQuestao
+        LEFT JOIN alternativa ON resposta.idQuestao = alternativa.idQuestao
+        WHERE idAplicacao = :idAplicacao
+        GROUP BY name`
     ,{
         replacements: { idAplicacao: idAplicacao }
     })
