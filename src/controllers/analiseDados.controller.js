@@ -6,12 +6,12 @@ module.exports = {
         const idAplicacao = req.params.id;
 
         try {
-            const Prova = await Sequelize.query(`select valor as value, nome as label from aplicacao where idAplicacao = :idAplicacao`,
+            const [prova] = await Sequelize.query(`select valor as value, nome as label from aplicacao where idAplicacao = :idAplicacao`,
             {
                 replacements: { idAplicacao: idAplicacao }
             })
 
-            const erroAcerto = await Sequelize.query(`
+            const [erroAcerto] = await Sequelize.query(`
                 SELECT distinct(questao.nome) AS name,
                 sum(resposta.resposta = alternativa.idAlternativa
                     AND alternativa.isAlternativaCorreta = TRUE) AS Acertos,
@@ -25,7 +25,7 @@ module.exports = {
             ,{
                 replacements: { idAplicacao: idAplicacao }
             })
-            const porcentagem = await Sequelize.query(`select
+            const [porcentagem] = await Sequelize.query(`select
                 aplicacao.nome as name,
                 concat(round(( sum(resposta.resposta = alternativa.isAlternativaCorreta)/count(resposta) * 100 ),2),'%') AS hitPercentage,
                 concat(round(( sum(resposta.resposta <> alternativa.isAlternativaCorreta)/count(resposta) * 100 ),2),'%') AS errorPercentage,
@@ -44,7 +44,7 @@ module.exports = {
             ,{
                 replacements: { idAplicacao: idAplicacao}
             })
-            const selecionaAlternativa = await Sequelize.query(`select  
+            const [selecionaAlternativa] = await Sequelize.query(`select  
                 distinct(questao.nome) as name, 
                 sum(resposta = 0) as "Alternativa A", 
                 sum(resposta = 1) as "Alternativa B",
@@ -58,7 +58,7 @@ module.exports = {
                 replacements: { idAplicacao: idAplicacao }
             })
 
-            res.status(200).json({ Prova, resume: porcentagem, barChartData: erroAcerto, lineChartData: selecionaAlternativa})
+            res.status(200).json({ prova, resume: porcentagem, barChartData: erroAcerto, lineChartData: selecionaAlternativa})
 
         } catch (err) {
             res.status(200).json({ error: "Ocorreu um erro ao buscar os resultados da avaliação."})
