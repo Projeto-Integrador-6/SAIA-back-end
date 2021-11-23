@@ -4,7 +4,8 @@ const Sequelize = require('../database/db');
 const bcrypt = require('bcrypt');
 const authConfig = require('../config/auth');
 
-const Usuario = db.usuario
+const Usuario = db.usuario;
+const Disciplina = db.disciplina;
 
 module.exports = {
   async create(req, res) {
@@ -65,15 +66,25 @@ module.exports = {
     const id = req.params.id;
 
     try {
-      const usuario = await Usuario.findOne({ where: { idUsuario: id } })
+      const usuario = await Usuario.findOne({ where: { idUsuario: id }})
 
       if (usuario == null) {
         return res.status(400).send({ err: "Usuário não encontrado." });
       }
 
+      const disciplina = await Sequelize.query(`
+        SELECT 
+        d.nome
+        FROM usuario AS U
+        LEFT JOIN aluno_disciplina AS AD ON AD.usuario_id = U.idUsuario
+        LEFT JOIN professor_disciplina AS PD ON PD.usuario_id = U.idUsuario
+        INNER JOIN disciplina AS D ON D.idDisciplina = AD.disciplina_id OR D.idDisciplina = PD.disciplina_id
+        WHERE U.idUsuario = :idUsuario
+      `, { replacements: { idUsuario: id }, type: Sequelize.QueryTypes.SELECT })
+
       usuario.password = undefined;
 
-      res.status(200).json({ usuario });
+      res.status(200).json({ usuario, disciplinas: disciplina });
 
     } catch (err) {
       console.log(err)
