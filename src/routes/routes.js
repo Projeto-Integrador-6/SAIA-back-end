@@ -15,6 +15,7 @@ const Tag = require('./tag.routes');
 const QuestaoTag = require('./questao_tag.routes');
 const Resposta = require('./resposta.routes')
 const AnaliseDados = require('./analiseDados.routes')
+const Acesso = require('./acesso.routes')
 
 routes.use(Auth);
 routes.use(Usuario);

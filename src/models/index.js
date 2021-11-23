@@ -23,6 +23,7 @@ db.questao_tag = require('./questao_tag.model.js')(sequelize, DataTypes)
 db.questao_avaliacao = require('./questao_avaliacao.model.js')(sequelize, DataTypes)
 db.aplicacao = require('./aplicacao.model.js')(sequelize, DataTypes)
 db.resposta = require('./resposta.model.js')(sequelize, DataTypes)
+db.acesso = require('./acesso.model.js')(sequelize, DataTypes)
 
 db.questao.belongsToMany(db.tag, {
   through: "questao_tag",
@@ -36,6 +37,10 @@ db.tag.belongsToMany(db.questao, {
 
 db.questao.hasMany(db.alternativa, {foreignKey: 'idQuestao'})
 db.alternativa.belongsTo(db.questao, {foreignKey: 'idQuestao'})
+
+
+db.aplicacao.hasMany(db.acesso, {foreignKey: 'idAplicacao'})
+db.acesso.belongsTo(db.aplicacao, {foreignKey: 'idAplicacao'})
 
 db.avaliacao.hasMany(db.aplicacao, {foreignKey: 'idAvaliacao'})
 db.aplicacao.belongsTo(db.avaliacao, {foreignKey: 'idAvaliacao'})
