@@ -89,7 +89,24 @@ module.exports = {
                 idDisciplinas.push(aluno_disciplina[i].disciplina_id);
             }
 
-            const aplicacao = await Aplicacao.findAll({ where: { idDisciplina: idDisciplinas }, include: [{ model: Disciplina }] })
+            const aplicacao = await Sequelize.query(`
+                SELECT 
+                A.idAplicacao,
+                A.nome,
+                A.valor,
+                A.dataInicio,
+                A.dataFim,
+                D.nome AS disciplina,
+                (CASE
+                    WHEN idAcesso IS NULL THEN 0
+                    WHEN idAcesso IS NOT NULL THEN 1
+                END
+                ) as participacao
+                FROM Aplicacao AS A
+                INNER JOIN disciplina AS D on D.idDisciplina = A.idDisciplina
+                LEFT JOIN acesso AS AC ON AC.idAplicacao = A.idAplicacao
+                WHERE A.idDisciplina IN (${idDisciplinas})
+            `, { type: Sequelize.QueryTypes.SELECT })
 
             res.status(200).json({ result: aplicacao });
 
