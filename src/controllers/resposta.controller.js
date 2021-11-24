@@ -6,6 +6,7 @@ const Usuario = db.usuario
 const Aplicacao = db.aplicacao
 const Questao = db.questao
 const Resposta = db.resposta
+const Acesso = db.acesso;
 
 module.exports = {
     async create(req, res) {
@@ -50,6 +51,11 @@ module.exports = {
                     resposta: resposta[i].resposta
                 })
              }
+
+             await Acesso.create({
+                 isFinalizado: true,
+                 idAplicacao: idAplicacao
+             })
 
              await transaction.commit();
 
