@@ -11,7 +11,7 @@ module.exports = {
                 replacements: { idAplicacao: idAplicacao }
             })
 
-            const erroAcerto = await Sequelize.query(`
+            const [erroAcerto] = await Sequelize.query(`
                 SELECT distinct(questao.nome) AS name,
                 sum(resposta.resposta = alternativa.idAlternativa
                     AND alternativa.isAlternativaCorreta = TRUE) AS Acertos,
@@ -24,7 +24,7 @@ module.exports = {
             ,{
                 replacements: { idAplicacao: idAplicacao }
             })
-            const porcentagem = await Sequelize.query(`select
+            const [porcentagem] = await Sequelize.query(`select
                 aplicacao.nome as name,
                 concat(round(( sum(resposta.resposta = alternativa.isAlternativaCorreta)/count(resposta) * 100 ),2),'%') AS hitPercentage,
                 concat(round(( sum(resposta.resposta <> alternativa.isAlternativaCorreta)/count(resposta) * 100 ),2),'%') AS errorPercentage,
@@ -43,7 +43,7 @@ module.exports = {
             ,{
                 replacements: { idAplicacao: idAplicacao}
             })
-            const selecionaAlternativa = await Sequelize.query(`select  
+            const [selecionaAlternativa] = await Sequelize.query(`select  
                 distinct(questao.nome) as name, 
                 sum(resposta = 0) as "Alternativa A", 
                 sum(resposta = 1) as "Alternativa B",
