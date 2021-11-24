@@ -79,6 +79,7 @@ module.exports = {
 
     async findByUser(req, res) {
         const idUsuario = req.params.usuario;
+        const dataLimite = req.query.date;
 
         try {
             const aluno_disciplina = await AlunoDisciplina.findAll({ where: { usuario_id: idUsuario } });
@@ -106,6 +107,7 @@ module.exports = {
                 INNER JOIN disciplina AS D on D.idDisciplina = A.idDisciplina
                 LEFT JOIN acesso AS AC ON AC.idAplicacao = A.idAplicacao
                 WHERE A.idDisciplina IN (${idDisciplinas})
+                AND A.dataFim <= '${dataLimite}'
             `, { type: Sequelize.QueryTypes.SELECT })
 
             res.status(200).json({ result: aplicacao });
