@@ -19,9 +19,8 @@ module.exports = {
                 AND alternativa.isAlternativaCorreta = FALSE) AS Erros
                 FROM resposta
                 INNER JOIN questao ON resposta.idQuestao = questao.idQuestao
-                LEFT JOIN alternativa ON resposta.idQuestao = alternativa.idQuestao
-                WHERE idAplicacao = :idAplicacao
-                GROUP BY name`
+                INNER JOIN alternativa ON resposta.idQuestao = alternativa.idQuestao
+                WHERE idAplicacao = :idAplicacao`
             ,{
                 replacements: { idAplicacao: idAplicacao }
             })
