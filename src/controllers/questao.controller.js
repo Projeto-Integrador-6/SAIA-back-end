@@ -36,6 +36,7 @@ module.exports = {
                 for (let i = 0; i < alternativas.length; i++) {
                     await Alternativa.create({
                         descricao: alternativas[i].descricao,
+                        sequencia: i,
                         isAlternativaCorreta: alternativas[i].isAlternativaCorreta,
                         idQuestao: newQuestao.idQuestao
                     })

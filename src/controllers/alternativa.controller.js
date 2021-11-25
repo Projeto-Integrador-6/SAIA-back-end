@@ -4,6 +4,7 @@ const Alternativa = db.alternativa
 exports.create = (req, res) => {
     const alternativa = {
         descricao: req.body.descricao,
+        sequencia: req.body.sequencia,
         isAlternativaCorreta: req.body.isAlternativaCorreta,
         idQuestao: req.body.idQuestao
     }

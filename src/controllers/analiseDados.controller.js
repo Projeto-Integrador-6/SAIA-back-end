@@ -35,6 +35,7 @@ module.exports = {
             ,{
                 replacements: { idAplicacao: idAplicacao}
             })
+
             const [erroAcerto] = await Sequelize.query(`
                 SELECT distinct ifnull(questao.nome,0) AS name,
                 ifnull(sum(resposta.resposta = alternativa.idAlternativa
@@ -49,6 +50,7 @@ module.exports = {
             ,{
                 replacements: { idAplicacao: idAplicacao }
             })
+
             const [selecionaAlternativa] = await Sequelize.query(`select  
                 distinct ifnull(questao.nome,0) as name, 
                 ifnull(sum(resposta = 0),0) as "Alternativa A", 
@@ -62,7 +64,20 @@ module.exports = {
                 replacements: { idAplicacao: idAplicacao }
             })
 
-            res.status(200).json({ Prova, resume: porcentagem, barChartData: erroAcerto, lineChartData: selecionaAlternativa})
+            const [radarTag] = await Sequelize.query(`select
+                tag.descricao as name,
+                count(questao_tag.tag_id) as qtdTag
+                from questao_tag
+                inner join tag on questao_tag.tag_id = tag.idTag
+                inner join questao_avaliacao on questao_avaliacao.questao_id = questao_tag.questao_id
+                inner join aplicacao on aplicacao.idAvaliacao = questao_avaliacao.avaliacao_id
+                where aplicacao.idAplicacao = :idAplicacao
+                group by name`
+            ,{
+                replacements: { idAplicacao: idAplicacao }
+            })
+
+            res.status(200).json({ Prova, resume: porcentagem, barChartData: erroAcerto, lineChartData: selecionaAlternativa, radarChartData: radarTag})
 
         } catch (err) {
             res.status(200).json({ error: "Ocorreu um erro ao buscar os resultados da avaliação."})

@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        sequencia: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         isAlternativaCorreta: {
             type: DataTypes.BOOLEAN,
             allowNull: false
