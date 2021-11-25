@@ -9,7 +9,7 @@ module.exports = {
         const idAplicacao = req.params.id;
 
         try {
-            const [Prova] = await Sequelize.query(`select valor as value, nome as label from aplicacao where idAplicacao = :idAplicacao`,
+            const [prova] = await Sequelize.query(`select valor as value, nome as label from aplicacao where idAplicacao = :idAplicacao`,
             {
                 replacements: { idAplicacao: idAplicacao }
             })
@@ -77,7 +77,7 @@ module.exports = {
                 replacements: { idAplicacao: idAplicacao }
             })
 
-            res.status(200).json({ Prova, resume: porcentagem, barChartData: erroAcerto, lineChartData: selecionaAlternativa, radarChartData: radarTag})
+            res.status(200).json({ prova, resume: porcentagem, barChartData: erroAcerto, lineChartData: selecionaAlternativa, radarChartData: radarTag})
 
         } catch (err) {
             res.status(200).json({ error: "Ocorreu um erro ao buscar os resultados da avaliação."})
