@@ -44,7 +44,8 @@ module.exports = {
                 FROM resposta
                 INNER JOIN questao ON resposta.idQuestao = questao.idQuestao
                 INNER JOIN alternativa ON resposta.idQuestao = alternativa.idQuestao
-                WHERE idAplicacao = :idAplicacao`
+                WHERE idAplicacao = :idAplicacao
+                group by name`
             ,{
                 replacements: { idAplicacao: idAplicacao }
             })
