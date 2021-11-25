@@ -9,7 +9,7 @@ module.exports = {
         const idAplicacao = req.params.id;
 
         try {
-            const Prova = await Sequelize.query(`select valor as value, nome as label from aplicacao where idAplicacao = :idAplicacao`,
+            const [Prova] = await Sequelize.query(`select valor as value, nome as label from aplicacao where idAplicacao = :idAplicacao`,
             {
                 replacements: { idAplicacao: idAplicacao }
             })
@@ -44,7 +44,8 @@ module.exports = {
                 FROM resposta
                 INNER JOIN questao ON resposta.idQuestao = questao.idQuestao
                 INNER JOIN alternativa ON resposta.idQuestao = alternativa.idQuestao
-                WHERE idAplicacao = :idAplicacao`
+                WHERE idAplicacao = :idAplicacao
+                group by name`
             ,{
                 replacements: { idAplicacao: idAplicacao }
             })
