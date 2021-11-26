@@ -66,7 +66,11 @@ module.exports = {
 
             const [radarTag] = await Sequelize.query(`select
                 ifnull(tag.descricao, 0) as Conteúdo,
-                ifnull(concat(round((count(questao_tag.tag_id)/(select sum(questao_tag.tag_id) from questao_tag where aplicacao.idAplicacao = 1)* 100),2), '%'), 0) as Porcentagem
+                ifnull(concat(round((count(questao_tag.tag_id)/(select 
+                    count(questao_avaliacao.questao_id) 
+                    from questao_avaliacao 
+                    inner join aplicacao on aplicacao.idAvaliacao = questao_avaliacao.avaliacao_id 
+                    where aplicacao.idAplicacao = 1)* 100),2), '%'), 0) as Porcentagem
                 from questao_tag
                 inner join tag on questao_tag.tag_id = tag.idTag
                 inner join questao_avaliacao on questao_avaliacao.questao_id = questao_tag.questao_id
