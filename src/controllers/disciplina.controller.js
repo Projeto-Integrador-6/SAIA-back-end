@@ -57,7 +57,8 @@ module.exports = {
 
             if(type == 'alunos'){
                 const aluno_disciplina = await Disciplina.findOne({
-                    where: { idDisciplina: id }, include: {
+                    where: { idDisciplina: id }, 
+                    include: {
                         model: Usuario,
                         as: "disciplina_aluno",
                         attributes: {
@@ -71,7 +72,8 @@ module.exports = {
 
             if(type == 'professores'){
                 const professor_disciplina = await Disciplina.findOne({
-                    where: { idDisciplina: id }, include: {
+                    where: { idDisciplina: id }, 
+                    include: {
                         model: Usuario,
                         as: "disciplina_professor",
                         attributes: {

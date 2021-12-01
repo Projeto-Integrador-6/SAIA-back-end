@@ -38,9 +38,11 @@ db.tag.belongsToMany(db.questao, {
 db.questao.hasMany(db.alternativa, {foreignKey: 'idQuestao'})
 db.alternativa.belongsTo(db.questao, {foreignKey: 'idQuestao'})
 
-
 db.aplicacao.hasMany(db.acesso, {foreignKey: 'idAplicacao'})
 db.acesso.belongsTo(db.aplicacao, {foreignKey: 'idAplicacao'})
+
+db.usuario.hasMany(db.acesso, {foreignKey: 'idUsuario'})
+db.acesso.belongsTo(db.usuario, {foreignKey: 'idUsuario'})
 
 db.avaliacao.hasMany(db.aplicacao, {foreignKey: 'idAvaliacao'})
 db.aplicacao.belongsTo(db.avaliacao, {foreignKey: 'idAvaliacao'})
@@ -102,7 +104,6 @@ db.resposta.belongsTo(db.aplicacao, {foreignKey: 'idAplicacao'})
 
 db.questao.hasMany(db.resposta, {foreignKey: 'idQuestao'});
 db.resposta.belongsTo(db.questao, {foreignKey: 'idQuestao'})
-
 
 db.disciplina.hasMany(db.aplicacao, { foreignKey: 'idDisciplina' });
 db.aplicacao.belongsTo(db.disciplina, { foreignKey: 'idDisciplina'})
