@@ -52,14 +52,18 @@ module.exports = {
                 })
 
             const [selecionaAlternativa] = await Sequelize.query(`select  
-                distinct ifnull(questao.nome,0) as name, 
-                ifnull(sum(resposta = 0),0) as "Alternativa A", 
-                ifnull(sum(resposta = 1),0) as "Alternativa B",
-                ifnull(sum(resposta = 2),0) as "Alternativa C", 
-                ifnull(sum(resposta = 3),0) as "Alternativa D"
-                from resposta
-                inner join questao on resposta.idQuestao = questao.idQuestao 
-                where resposta.idAplicacao = :idAplicacao`
+                    distinct ifnull(questao.nome,0) as name, 
+                    ifnull(sum(alternativa.sequencia = 0),0) as "Alternativa A", 
+                    ifnull(sum(alternativa.sequencia = 1),0) as "Alternativa B",
+                    ifnull(sum(alternativa.sequencia = 2),0) as "Alternativa C", 
+                    ifnull(sum(alternativa.sequencia = 3),0) as "Alternativa D",
+                    ifnull(sum(alternativa.sequencia = 4),0) as "Alternativa E",
+                    ifnull(sum(alternativa.sequencia = 5),0) as "Alternativa F"
+                    from resposta
+                    inner join questao on resposta.idQuestao = questao.idQuestao 
+                    inner join alternativa on resposta.resposta = alternativa.idAlternativa
+                    where resposta.idAplicacao = :idAplicacao
+                    group by name`
                 , {
                     replacements: { idAplicacao: idAplicacao }
                 })
