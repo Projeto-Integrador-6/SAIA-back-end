@@ -89,39 +89,27 @@ module.exports = {
         idDisciplinas.push(aluno_disciplina[i].disciplina_id);
       }
 
-      const aplicacoesEmAndamento = await Sequelize.query(`
-          SELECT 
-          A.idAplicacao,
-          A.nome,
-          A.valor,
-          A.dataInicio,
-          A.dataFim,
-          D.nome AS disciplina
-          FROM Aplicacao AS A
-          INNER JOIN disciplina AS D on D.idDisciplina = A.idDisciplina
-          LEFT JOIN acesso AS AC ON AC.idAplicacao = A.idAplicacao
-          WHERE A.idDisciplina IN (${idDisciplinas})
-          AND AC.idUsuario NOT IN (SELECT idUsuario from acesso where idUsuario = ${idUsuario})
+      const aplicacoes = await Sequelize.query(`
+        SELECT 
+        A.idAplicacao,
+        A.nome,
+        A.valor,
+        A.dataInicio,
+        A.dataFim,
+        D.nome AS disciplina,
+        (
+        CASE
+          WHEN a.idAplicacao NOT IN (SELECT idAplicacao FROM Acesso where idUsuario = ${idUsuario}) THEN 0
+          WHEN a.idAplicacao IN (SELECT idAplicacao FROM Acesso where idUsuario = ${idUsuario}) THEN 1
+        END
+        ) AS participacao
+        FROM Aplicacao AS A
+        INNER JOIN disciplina AS D on D.idDisciplina = A.idDisciplina
+        WHERE A.idDisciplina IN (${idDisciplinas})
           AND A.dataFim >= '${dataLimite}' 
         `, { type: Sequelize.QueryTypes.SELECT })
 
-      const aplicacoesEncerradas = await Sequelize.query(`
-          SELECT 
-          A.idAplicacao,
-          A.nome,
-          A.valor,
-          A.dataInicio,
-          A.dataFim,
-          D.nome AS disciplina
-          FROM Aplicacao AS A
-          INNER JOIN disciplina AS D on D.idDisciplina = A.idDisciplina
-          LEFT JOIN acesso AS AC ON AC.idAplicacao = A.idAplicacao
-          WHERE A.idDisciplina IN (${idDisciplinas})
-          AND AC.idUsuario IN (SELECT idUsuario from acesso where idUsuario = ${idUsuario})
-          AND A.dataFim <= '${dataLimite}' 
-        `, { type: Sequelize.QueryTypes.SELECT })
-
-      res.status(200).json({ andamento: aplicacoesEmAndamento, encerradas: aplicacoesEncerradas });
+      res.status(200).json({ result: aplicacoes });
 
     } catch (err) {
       res.status(400).json({ error: "Ocorreu um erro ao buscar as avaliações aplicadas." });
