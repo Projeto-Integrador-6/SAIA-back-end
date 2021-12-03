@@ -119,7 +119,7 @@ module.exports = {
          })
 
          const resposta = await Sequelize.query(`
-            SELECT DISTINCT A.idAlternativa, A.descricao, A.idQuestao FROM resposta AS R
+            SELECT DISTINCT A.idAlternativa, A.descricao, A.idQuestao, a.isAlternativaCorreta as correta FROM resposta AS R
             INNER JOIN alternativa AS A ON A.idAlternativa = R.resposta
             WHERE idUsuario = ${idUsuario} AND idAplicacao = ${idAplicacao}    
          `, { type: Sequelize.QueryTypes.SELECT })

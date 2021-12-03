@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const authConfig = require('../config/auth');
 
 const Usuario = db.usuario;
+const AlunoDisciplina = db.aluno_disciplina;
 
 module.exports = {
   async create(req, res) {
@@ -118,6 +119,14 @@ module.exports = {
     try {
       const usuario = await Usuario.findOne({ where: { idUsuario: id } })
 
+      const aluno_disciplina = await AlunoDisciplina.findAll({ where: { usuario_id: id } });
+
+      const idDisciplinas = []
+
+      for (let i = 0; i < aluno_disciplina.length; i++) {
+        idDisciplinas.push(aluno_disciplina[i].disciplina_id);
+      }
+
       if (usuario == null) {
         return res.status(400).send({ err: "Usuário não encontrado." });
       }
@@ -131,8 +140,8 @@ module.exports = {
       const aplicacoes = await Sequelize.query(`
         SELECT count(idAplicacao) as AvaliacoesEmAndamento
         FROM aplicacao
-        WHERE idUsuario = ${id}
-        AND dataFim > Now()
+        WHERE idDisciplina IN (${idDisciplinas})
+        AND dataFim >= Now()
       `, { type: Sequelize.QueryTypes.SELECT })
 
       res.status(200).json({ avaliacoes, aplicacoes });
