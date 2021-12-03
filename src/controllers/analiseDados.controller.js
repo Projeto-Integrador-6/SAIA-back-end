@@ -70,7 +70,7 @@ module.exports = {
 
             const [radarTag] = await Sequelize.query(`select
                     tag.descricao as Conteúdo,
-                    concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa)* 100),2),'%') as Porcentagem
+                    concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa)* 100),2)) as Porcentagem
                     from resposta
                     inner join aplicacao on resposta.idAplicacao = aplicacao.idAplicacao
                     inner join questao on resposta.idQuestao = questao.idQuestao
