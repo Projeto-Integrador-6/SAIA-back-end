@@ -106,7 +106,7 @@ module.exports = {
         FROM Aplicacao AS A
         INNER JOIN disciplina AS D on D.idDisciplina = A.idDisciplina
         WHERE A.idDisciplina IN (${idDisciplinas})
-          AND A.dataFim >= '${dataLimite}' 
+        AND A.dataFim >= '${dataLimite}' 
         `, { type: Sequelize.QueryTypes.SELECT })
 
       res.status(200).json({ result: aplicacoes });

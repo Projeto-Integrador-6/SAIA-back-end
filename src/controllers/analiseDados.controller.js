@@ -90,5 +90,41 @@ module.exports = {
         } catch (err) {
             res.status(200).json({ error: "Ocorreu um erro ao buscar os resultados da avaliação." })
         }
+    },
+
+    async analiseIndividual(req, res) {
+        const idAplicacao = req.params.idAplicacao;
+        const idUsuario = req.params.idUsuario
+
+        try {
+            const [porcentagem] = await Sequelize.query(`
+            select
+            ifnull(aplicacao.nome,0) as name,
+            ifnull(concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa) * 100 ),2),'%'),0) AS hitPercentage,
+            ifnull(concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = FALSE)/sum(resposta.resposta = alternativa.idAlternativa) * 100 ),2),'%'),0) AS errorPercentage,
+            case
+                when concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa) * 100 ),2),'%') > 0 
+                and concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa) * 100 ),2),'%') <= 40 then "RUIM"
+                when concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa) * 100 ),2),'%') > 40
+                and concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa) * 100 ),2),'%') <= 80  then "BOM"
+                when concat(round(( sum(resposta.resposta = alternativa.idAlternativa AND alternativa.isAlternativaCorreta = TRUE)/sum(resposta.resposta = alternativa.idAlternativa) * 100 ),2),'%') > 80 then "EXCELENTE" 
+                else 0
+                end as performance
+            from resposta
+            inner join aplicacao on resposta.idAplicacao = aplicacao.idAplicacao
+            left join questao on resposta.idQuestao = questao.idQuestao
+            left join alternativa on resposta.idQuestao = alternativa.idQuestao
+            where 
+            resposta.idAplicacao = :idAplicacao AND resposta.idUsuario = :idUsuario`
+            , {
+                replacements: { idAplicacao: idAplicacao, idUsuario: idUsuario }
+            })
+
+            res.status(200).json({ resume: porcentagem })
+
+        } catch (err) {
+            res.status(200).json({ error: "Ocorreu um erro ao buscar os resultados da avaliação do aluno." })
+        }
+        
     }
 }
